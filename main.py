@@ -21,6 +21,7 @@ from app.controllers.success_controller import SuccessController
 from app.controllers.video import VideoScreenController
 from app.controllers.auth_method_controller import AuthMethodController 
 from app.controllers.password_controller import PassWordController
+from app.controllers.service_controller import ServiceController
 from app.database.database import Database
 from app.database.locker_repository import LockerRepository
 from PyQt6.QtGui import QMovie
@@ -75,6 +76,7 @@ select_mode = SelectModeController(stacked_widget, loading_page, success_page)
 video_page = VideoScreenController(stacked_widget)
 auth_method_page = AuthMethodController(stacked_widget)
 password_page = PassWordController(stacked_widget)
+service_page = ServiceController(stacked_widget)
 
 # ADD PAGE TO STACK
 
@@ -89,7 +91,7 @@ stacked_widget.addWidget(success_page)
 stacked_widget.addWidget(video_page)
 stacked_widget.addWidget(auth_method_page)
 stacked_widget.addWidget(password_page)
-
+stacked_widget.addWidget(service_page)
 
 
 ##############################
@@ -134,7 +136,7 @@ stacked_widget.setFixedWidth(1024)
 stacked_widget.setCurrentIndex(7)
 
 
-stacked_widget.showFullScreen()
+stacked_widget.show()
 
 
 sys.exit(app.exec())

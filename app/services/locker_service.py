@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer, pyqtSignal, QUrl, QObject
 from PyQt6.uic import loadUi
 import sys
-import MySQLdb as mdb
 import random
 import secrets
 import smtplib
