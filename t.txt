@@ -1,0 +1,211 @@
+############################### CONTROLLERS
+=> điều phối
+- vai trò:
+ + nhận sự kiện từ ui
+ + gọi service
+ + cập nhật giao diện
+
+NOTE:
+
+Controller:
+
+KHÔNG viết SQL
+KHÔNG xử lý AI
+KHÔNG xử lý camera
+KHÔNG gửi serial trực tiếp
+
+Nó chỉ điều phối.
+
+
+THỰC HIỆN:
+CHỈ GIỮ LẠI :
+
+- load ui
+- connection button
+- update giao diện
+
+################################  services
+
+Đây là:
+
+	“bộ não nghiệp vụ”
++ Ví dụ:
+
+auth_service.py
++ Chịu trách nhiệm:
+	đăng nhập
+	kiểm tra user
+	xác thực
+
+
+face_service.py
+Chỉ xử lý:
+	detect face
+	encoding
+	recognition
+
+
+locker_service.py
+Chỉ xử lý:
+
+	mở tủ
+	đóng tủ
+	timeout
+	kiểm tra trạng thái
+
+
+################################  database
+
+Đây là:
+
+“kho dữ liệu”
+
+db.py
+Nơi:
+	tạo connection SQLite
+	connect database
+
++ ví dụ 
+
+user_repository.py => chỉ chuyên thao tác trên bảng user
+
+locker_repository.py => chuyên thao tác liên quan đến log tủ
+
+
+################################  devices
+
+
+Nó là:
+
++ “lớp giao tiếp phần cứng”
+
+esp32.py
+Chuyên:
+	gửi serial
+	nhận serial
+	reconnect
+
+
+################################  widgets
+
+
+Nơi chứa:
+
++ “UI component tái sử dụng”
+
+Ví dụ
+keyboard_widget.py
+Bàn phím ảo.
+
+Sau này:
+	login dùng
+	register dùng
+	admin dùng
+
+	=> Không cần viết lại.
+
+
+video_widget.py
+Chuyên:
+	phát video intro
+	loading animation
+
+
+################################  assets
+
+
+images/
+	backgrounds/
+	avatars/
+	face/
+icons/
+	open.png
+	close.png
+	home.svg
+videos/
+	intro.mp4
+	loading.mp4
+
+QUAN TRỌNG
+
+Không được:
+	video1.mp4
+	newvideo.mp4
+	ok_final.mp4
+
+
+################################  utils
+
+Đây là:
+
+“đồ nghề phụ trợ”
+
+logger.py
+
+Sau này cực quan trọng.
+
+Ví dụ:
+
+logger.info("Locker 5 opened")
+logger.error("ESP32 disconnected")
+helper.py
+
+Các hàm nhỏ:
+
+resize image
+convert frame
+validate text
+
+
+
+################################  MAIN.PY
+
+
+
+main.py chỉ nên:
+	tạo QApplication
+	khởi tạo controller
+	start app
+
+
+^^^^^^^ 1. tại sao loading và success page không được truyền stacked_wiidget ?
+
+loading_page = LoadingController()
+success_page = SuccessController()
+=> vì loading và success không tự chuyển trang, 2 page chỉ là display component 
+
+ NÊN: không cần truyền stacked_widget vào
+
+^^^^^^^ 2. tại sao phải truyền loading và success vào select_mode ? 
+
+select_mode = SelectModeController(stacked_widget, loading_page, success_page)
+
+-> SelectModeController là nơi: điều khiển flow cho trang đó (để điều khiển việc hiển thị 2 trang đó)
+
+
+^^^^^^^ 3. tại sao lại phải có (self, stacked_widget) trong các init ?
+
+Trong file main.py
+
+stacked_widget = QStackedWidget()
+
+begin_page = BeginController(stacked_widget) => "Tôi đưa stacked_widget vào cho controller dùng"
+
+Trong file Controller
+
+def __init__(self, stacked_widget):
+  self.stacked_widget = stacked_widget
+
++ nếu không có stacked_widget   => việc chuyển trang không xảy ra (self.stacked_widget.setCurrentIndex(1))
+
+
+
+24/5 :
+- đưa cam
+- đưa file vi điều khiển
+- các trường hợp ui bị đơ, mất wifi
+- khi vô giao diện chờ ( loading => xác nhận logic (camera lấy khuôn mặt, khóa tủ mở, vi điều khiển phản hồi) => success)
+	=>  nếu có lỗi gì thì hiện Error
+- giao diện chọn tủ
+- đưa vào bảng csdl
+- hoàn thành giao diện đẹp

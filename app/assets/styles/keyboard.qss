@@ -1,0 +1,86 @@
+/* Dấu chấm nghĩa là áp dụng cho TẤT CẢ các widget có thuộc tính class="systemButton" */
+QPushButton.systemButton {
+    background-color: #8eaddd;
+    color: #ffffff;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #33197a; 
+    padding: 12px 24px;
+}
+
+QPushButton.systemButton:pressed, 
+QPushButton.systemButton:checked {
+    background-color: #2c3e50 !important;
+    border-color: #1a252f !important;
+    color: #ffffff !important;
+}
+
+
+
+
+
+#keyboard_container {
+    background-color: #dcdcdc;
+}
+
+QScrollBar:vertical {
+    width: 25px;
+    background: #f0f0f0;
+}
+
+QScrollBar::handle:vertical {
+    background: #00796B;
+    min-height: 40px;
+    border-radius: 8px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+
+/* ================= NORMAL BUTTON (Các phím chữ/số trắng) ================= */
+QPushButton#normalButton {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #b3b3b3; 
+    padding: 8px; 
+}
+
+/* Thêm trạng thái :checked để hỗ trợ màn hình cảm ứng Waveshare */
+QPushButton#normalButton:pressed, 
+QPushButton#normalButton:checked {
+    background-color: #2c3e50 !important; /* Chuyển hẳn sang màu xanh đen tối hẳn */
+    border-color: #1a252f !important;
+    color: #ffffff !important;            /* Đổi chữ sang màu trắng để nhìn rõ */
+}
+
+
+/* ================= SPECIAL BUTTON (Các phím SHIFT, ENTER, SPACE xám) ================= */
+QPushButton#specialButton {
+    background-color: #7f8c8d; 
+    color: #ffffff;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #616d6e; 
+    padding: 8px;
+}
+
+/* Thêm trạng thái :checked và đẩy tương phản lên tối đa */
+QPushButton#specialButton:pressed, 
+QPushButton#specialButton:checked {
+    background-color: #00796B !important; /* Khi nhấn sẽ chuyển sang màu xanh đặc trưng của thanh cuộn */
+    border-color: #004d40 !important;
+    color: #ffffff !important;
+}
