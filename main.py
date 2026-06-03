@@ -25,6 +25,7 @@ from app.controllers.service_controller import ServiceController
 from app.controllers.GUI_DO import SelectMode_GUIDOController
 from app.controllers.send_otp_controller import SendEmailController
 from app.controllers.enter_otp_controller import EnterEmailController
+from app.controllers.service_controller import ServiceController
 from app.database.database import Database
 from app.database.locker_repository import LockerRepository
 from PyQt6.QtGui import QMovie
@@ -83,7 +84,7 @@ service_page = ServiceController(stacked_widget)
 select_guido = SelectMode_GUIDOController(stacked_widget, loading_page, success_page)
 sendOTP_page = SendEmailController(stacked_widget)
 enterOTP_page = EnterEmailController(stacked_widget)
-
+service_page = ServiceController(stacked_widget)
 # ADD PAGE TO STACK
 
 
@@ -100,7 +101,7 @@ stacked_widget.addWidget(password_page)             #9
 stacked_widget.addWidget(select_guido)              #10
 stacked_widget.addWidget(sendOTP_page)              #11
 stacked_widget.addWidget(enterOTP_page)             #12
-stacked_widget.addWidget(service_page)              #13
+stacked_widget.addWidget(service_page)    
 
 ##############################
 
