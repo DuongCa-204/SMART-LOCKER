@@ -161,7 +161,11 @@ class SelectLockerController(QMainWindow):
         locker_id = Session.selected_locker
         name = self.auth_service.get_name_user(user)
 
-
+        print("===== CONFIRM =====")
+        print("USER:", user)
+        print("LOCKER:", locker_id)
+        print("NAME:", name)
+        
         # success = self.locker_service.set_status_locker( user, locker_id)
         self.locker_service.set_status_locker( user, locker_id, name)
 

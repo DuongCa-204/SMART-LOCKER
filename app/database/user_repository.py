@@ -94,7 +94,7 @@ class UserRepository:
 
             cursor.execute(
                 """
-                SELECT NAME
+                SELECT name
                 FROM Users
                 WHERE MSSV = ?
                 """,
@@ -104,3 +104,28 @@ class UserRepository:
             result = cursor.fetchone()
 
             return result[0]
+
+    def get_email_by_mssv(self, mssv):
+
+        conn = self.db.connect()
+
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT email
+            FROM Users
+            WHERE mssv = ?
+            """,
+            (mssv,)
+        )
+
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result:
+            return result[0]
+
+        return None
+

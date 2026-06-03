@@ -4,6 +4,7 @@ from PyQt6 import uic
 from app.utils.session import Session
 from app.services.auth_service import AuthService
 from app.widgets.virtual_keyboard import VirtualKeyboard
+from app.services.locker_service import LockerService
 from PyQt6.QtCore import QTimer, QEvent, Qt
 
 
@@ -17,6 +18,7 @@ class PassWordController(QMainWindow):
         self.stacked_widget = stacked_widget
 
         self.auth_service = AuthService()
+        self.locker_service = LockerService()
 
         ########### SETUP BÀN PHÍM ###########
         self.keyboard = VirtualKeyboard()
@@ -52,7 +54,7 @@ class PassWordController(QMainWindow):
             )
 
             self.thong_bao_pass.setText(message)
-            QTimer.singleShot(1000, self.go_to_select_mode)
+            QTimer.singleShot(1000, self.go_to_enterOTP)
 
 
         else:
@@ -63,8 +65,10 @@ class PassWordController(QMainWindow):
 
             self.thong_bao_pass.setText(message)
 
-    def go_to_select_mode(self):
-        self.stacked_widget.setCurrentIndex(3)
+
+
+    def go_to_enterOTP(self):
+        self.stacked_widget.setCurrentIndex(11)
         self.reset_form()
 
     def go_to_begin(self):

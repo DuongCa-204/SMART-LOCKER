@@ -22,6 +22,9 @@ from app.controllers.video import VideoScreenController
 from app.controllers.auth_method_controller import AuthMethodController 
 from app.controllers.password_controller import PassWordController
 from app.controllers.service_controller import ServiceController
+from app.controllers.GUI_DO import SelectMode_GUIDOController
+from app.controllers.send_otp_controller import SendEmailController
+from app.controllers.enter_otp_controller import EnterEmailController
 from app.database.database import Database
 from app.database.locker_repository import LockerRepository
 from PyQt6.QtGui import QMovie
@@ -77,22 +80,27 @@ video_page = VideoScreenController(stacked_widget)
 auth_method_page = AuthMethodController(stacked_widget)
 password_page = PassWordController(stacked_widget)
 service_page = ServiceController(stacked_widget)
+select_guido = SelectMode_GUIDOController(stacked_widget, loading_page, success_page)
+sendOTP_page = SendEmailController(stacked_widget)
+enterOTP_page = EnterEmailController(stacked_widget)
 
 # ADD PAGE TO STACK
 
 
-stacked_widget.addWidget(begin_page)
-stacked_widget.addWidget(login_page)
-stacked_widget.addWidget(register_page)
-stacked_widget.addWidget(select_mode)
-stacked_widget.addWidget(select_page)
-stacked_widget.addWidget(loading_page)
-stacked_widget.addWidget(success_page)
-stacked_widget.addWidget(video_page)
-stacked_widget.addWidget(auth_method_page)
-stacked_widget.addWidget(password_page)
-stacked_widget.addWidget(service_page)
-
+stacked_widget.addWidget(begin_page)                #0
+stacked_widget.addWidget(login_page)                #1
+stacked_widget.addWidget(register_page)             #2
+stacked_widget.addWidget(select_mode)               #3
+stacked_widget.addWidget(select_page)               #4
+stacked_widget.addWidget(loading_page)              #5
+stacked_widget.addWidget(success_page)              #6
+stacked_widget.addWidget(video_page)                #7
+stacked_widget.addWidget(auth_method_page)          #8
+stacked_widget.addWidget(password_page)             #9
+stacked_widget.addWidget(select_guido)              #10
+stacked_widget.addWidget(sendOTP_page)              #11
+stacked_widget.addWidget(enterOTP_page)             #12
+stacked_widget.addWidget(service_page)              #13
 
 ##############################
 
