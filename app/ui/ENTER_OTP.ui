@@ -99,7 +99,7 @@
          <string>Mã OTP đã được gửi đến mail</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="send_email">
         <property name="geometry">
          <rect>
           <x>100</x>
@@ -150,12 +150,12 @@
          <string>Vui lòng nhập mã trong:</string>
         </property>
        </widget>
-       <widget class="QLabel" name="lbl_countdown">
+       <widget class="QLabel" name="time_label">
         <property name="geometry">
          <rect>
-          <x>120</x>
-          <y>160</y>
-          <width>121</width>
+          <x>30</x>
+          <y>150</y>
+          <width>291</width>
           <height>71</height>
          </rect>
         </property>
@@ -172,6 +172,27 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="thong_bao_email">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>510</y>
+          <width>291</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </widget>
@@ -845,7 +866,7 @@ background-color:#34495E;
          </font>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
         </property>
        </widget>
       </widget>

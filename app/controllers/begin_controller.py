@@ -24,7 +24,7 @@ class BeginController(QMainWindow):
             label.setCursor(Qt.CursorShape.PointingHandCursor)
             label.original_style = label.styleSheet()
 
-        self.service_button.clicked.connect(self.go_to_service)
+        # self.service_button.clicked.connect(self.go_to_service)
         self.login_b.clicked.connect(self.go_to_login)
         self.sign_in.clicked.connect(self.go_to_sign_in)
 
@@ -35,8 +35,8 @@ class BeginController(QMainWindow):
         except FileNotFoundError:
             print("Lưu ý: Không tìm thấy file QSS!")
 
-    def go_to_service(self):
-        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(10))
+    # def go_to_service(self):
+    #     QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(10))
 
     def go_to_login(self):
         QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(1))

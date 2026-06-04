@@ -5,6 +5,8 @@ from PyQt6.QtCore import QTimer
 from app.utils.session import Session
 from app.services.auth_service import AuthService
 from app.services.locker_service import LockerService
+from app.controllers.send_otp_worker import SendOtpWorker
+from datetime import datetime
 
 class EnterEmailController(QMainWindow):
 
@@ -22,7 +24,14 @@ class EnterEmailController(QMainWindow):
         self.auth_service = AuthService()
         self.locker_service = LockerService()
 
-        # EVENT
+        ################ xử lí đếm giây #############
+        self.countdown_timer = QTimer()
+
+        self.countdown_timer.timeout.connect(
+            self.update_countdown
+        )
+
+        # EVENT ############## xử lí nút nhấn ##############
 
         self.pin =""
 
@@ -118,3 +127,151 @@ class EnterEmailController(QMainWindow):
         self.update_lable()
 
         super().showEvent(event)
+
+
+###########################################################################################
+####################################    LEFT WIDGET #######################################
+###########################################################################################
+
+
+        self.worker = None
+
+        # EVENT
+        self.send_email.clicked.connect(
+            self.send_otp
+        )
+
+    # =========================
+    # SEND OTP
+    # =========================
+    def send_otp(self):
+
+        user = Session.current_user
+
+        email = (
+            self.auth_service
+            .get_email_user(user)
+        )
+
+        if not email:
+
+            self.thong_bao_email.setStyleSheet(
+                "color: red;"
+            )
+
+            self.thong_bao_email.setText(
+                "Không tìm thấy email!"
+            )
+
+            return
+
+        # Hiện trạng thái đang gửi
+        self.thong_bao_email.setStyleSheet(
+            "color: blue;"
+        )
+
+        self.thong_bao_email.setText(
+            "Đang gửi OTP..."
+        )
+
+        # khóa nút tránh spam
+        self.send_email.setEnabled(False)
+
+        # tạo worker
+        self.worker = SendOtpWorker(
+            self.auth_service,
+            email
+        )
+
+        self.worker.finished.connect(
+            self.on_send_finished
+        )
+
+        self.worker.start()
+
+    # =========================
+    # KẾT QUẢ GỬI MAIL
+    # =========================
+    def on_send_finished(
+        self,
+        success,
+        message
+    ):
+
+        self.send_email.setEnabled(True)
+
+        if success:
+
+            self.thong_bao_email.setStyleSheet(
+                "color: green;"
+            )
+
+            self.thong_bao_email.setText(
+                message
+            )
+
+            # QTimer.singleShot(
+            #     1000,
+            #     self.go_to_enter_otp
+            # )
+
+        else:
+
+            self.thong_bao_email.setStyleSheet(
+                "color: red;"
+            )
+
+            self.thong_bao_email.setText(
+                message
+            )
+
+
+###########################################################################################
+####################################    LEFT WIDGET #######################################
+###########################################################################################
+
+
+
+
+    def showEvent(self, event):
+
+        self.start_countdown()
+
+        super().showEvent(event)
+
+
+    def start_countdown(self):
+
+        # self.remaining_seconds = 30
+
+        self.time_label.setText(
+            "30 giây"
+        )
+
+        self.countdown_timer.start(
+            1000
+        )
+
+
+    def update_countdown(self):
+
+        remaining = int(
+            (
+                Session.otp_expire_time
+                - datetime.now()
+            ).total_seconds()
+        )
+
+        if remaining <= 0:
+
+            self.countdown_timer.stop()
+
+            self.time_label.setText(
+                "OTP đã hết hạn"
+            )
+
+            return
+
+        self.time_label.setText(
+            f"{remaining} giây"
+        )
