@@ -1,0 +1,23 @@
+# Secret
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# SQLite
+*.db
+
+# Virtual environment
+venv/
+.venv/
+
+# VS Code
+.vscode/
+
+# Office temporary files
+~$*
+
+# Build
+build/
+dist/

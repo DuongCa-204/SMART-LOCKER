@@ -21,7 +21,7 @@ class SelectModeController(QMainWindow):
         self.locker_service = LockerService()
         self.auth_service = AuthService()
 
-        self.gui_do.clicked.connect(self.GUI_DO)
+
         self.lay_do.clicked.connect(self.MO_TU)
         self.tra_tu.clicked.connect(self.TRA_TU)
 

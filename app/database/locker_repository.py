@@ -25,11 +25,15 @@ class LockerRepository:
         )
 
         result = cursor.fetchone()
-
         conn.close()
 
-        return result   
-    
+        if result:
+            return result[0]
+        
+        
+        return None
+        
+
 
     
     def has_available_locker(self):
@@ -72,7 +76,7 @@ class LockerRepository:
 
         cursor.execute(
             """
-            INSERT INTO LockerLog
+            INSERT INTO Locker_access_log
             (
                 locker_id,
                 mssv,
@@ -142,7 +146,7 @@ class LockerRepository:
                         )
                    
             cursor.execute("""
-                            INSERT INTO LockerLog 
+                            INSERT INTO Locker_access_log 
                             (locker_id, mssv, timestamp, event, name)
                             VALUES (?, ?, ?, ?, ?)""", 
                             (locker_id, user, now, 'BORROW', name))
@@ -187,7 +191,7 @@ class LockerRepository:
                        WHERE mssv =? """,
                        (now, user,)
                        )
-        cursor.execute("""INSERT INTO LockerLog 
+        cursor.execute("""INSERT INTO Locker_access_log 
                        (locker_id, mssv, timestamp, event, name)
                         VALUES (?, ?, ?, ?, ?)""", 
                         (locker_id, user, now, 'RETURN', name))

@@ -41,6 +41,12 @@ class ServiceController(QMainWindow):
         if success:
             settings = load_ktv_settings()
             next_index = settings["next_page_index"]
+            # Lưu thông tin KTV vào Session
+            from app.utils.session import Session
+            Session.ktv_pin = pin
+            Session.ktv_name = settings.get("ktv_name", "KTV")
+            Session.ktv_id = settings.get("ktv_id", "KTV001")
+            # ===================================
             self.show_message(message, error=False)
             QTimer.singleShot(
                 500,

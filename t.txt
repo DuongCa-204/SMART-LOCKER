@@ -209,3 +209,255 @@ def __init__(self, stacked_widget):
 - giao diện chọn tủ
 - đưa vào bảng csdl
 - hoàn thành giao diện đẹp
+
+03/06/2026: làm giao diện OTP
+
+- khi gom chung lại một file send_otp_controller.py
+1. Vấn đề hiện tại của bạn
+
+Hiện tại khi bấm:
+
+self.semail_b.clicked.connect(
+    self.send_otp
+)
+
+PyQt sẽ gọi:
+
+send_otp()
+
+Trong đó:
+
+success, message = (
+    self.auth_service
+    .send_otp_to_email(email)
+)
+
+Và bên trong:
+
+	server = smtplib.SMTP(...)
+	server.starttls()
+	server.login(...)
+	server.sendmail(...)
+
+Giả sử Gmail mất:
+
+2 giây
+
+thì chuyện gì xảy ra?
+
+	UI Thread
+	↓
+	send_otp()
+	↓
+	login gmail
+	↓
+	gửi mail
+	↓
+	đợi gmail phản hồi
+	↓
+	xong
+
+Trong lúc chờ:
+		UI không vẽ lại
+		UI không nhận cảm ứng
+		UI không nhận click
+
+Windows thấy chương trình không phản hồi:
+
+dẫn đến: Python (Not Responding)
+
+VÍ DỤ ĐƠN GIẢN:
+
+2. Tại sao phải dùng Thread
+
+Ta muốn:
+
+		UI vẫn chạy
+		↓
+		Gmail gửi ở nền
+
+Giống như:
+
+		Bạn ngồi quầy lễ tân
+
+		Bạn = UI Thread
+
+Nhân viên giao hàng = Worker Thread
+
+Khách nói:
+
+		Gửi OTP đi
+
+Nếu bạn tự chạy đi gửi:
+
+		Quầy trống
+		Khách phải đợi
+
+Nếu thuê nhân viên:
+
+		Bạn vẫn ngồi quầy
+		Nhân viên đi gửi
+
+Đó chính là Thread.
+
+=> việc tạo file send_otp_woker.py nhầm giải quyết vấn đề này:
+	+ nó sẽ tạo ra một luồng hoạt động song song
+
+GIẢI THÍCH HOẠT động
+
+4. Khi bấm SEND
+
+Giả sử:
+
+self.worker = SendOtpWorker(
+    self.auth_service,
+    email
+)
+
+Lúc này tạo ra object:
+
+worker
+
+chứa:
+
+self.auth_service
+self.email
+
+Ví dụ:
+
+email = "abc@gmail.com"
+
+thì:
+
+worker
+ ├─ auth_service
+ └─ abc@gmail.com
+5. finished.connect()
+
+Đoạn này:
+
+self.worker.finished.connect(
+    self.on_send_finished
+)
+
+nghĩa là:
+
+Nếu worker làm xong
+↓
+Tự động gọi
+on_send_finished()
+
+Giống như:
+
+Nhân viên giao hàng:
+
+"Gửi xong rồi nhé!"
+6. worker.start()
+
+Đây là phần quan trọng nhất.
+
+Khi:
+
+self.worker.start()
+
+PyQt tạo:
+
+Main Thread
++
+Worker Thread
+
+Lúc này:
+
+Main Thread
+
+vẫn hoạt động:
+
+Click
+Touch
+Animation
+Video
+Loading
+
+Còn:
+
+Worker Thread
+
+chạy:
+
+run()
+7. Hàm run()
+
+Trong file worker:
+
+def run(self):
+
+PyQt tự gọi hàm này.
+
+Tương đương:
+
+worker.start()
+
+↓
+
+worker.run()
+
+Trong run:
+
+success, message = (
+    self.auth_service.send_otp_to_email(
+        self.email
+    )
+)
+
+Nó gửi Gmail.
+
+8. Gửi kết quả về
+
+Sau khi gửi xong:
+
+self.finished.emit(
+    success,
+    message
+)
+
+Ví dụ:
+
+self.finished.emit(
+    True,
+    "Đã gửi OTP"
+)
+
+emit()
+
+nghĩa là:
+
+Phát tín hiệu
+9. Tín hiệu chạy về Controller
+
+Do trước đó đã:
+
+self.worker.finished.connect(
+    self.on_send_finished
+)
+
+nên:
+
+finished
+↓
+on_send_finished()
+
+được gọi tự động.
+
+Ví dụ:
+
+self.finished.emit(
+    True,
+    "Đã gửi OTP"
+)
+
+↓
+
+on_send_finished(
+    True,
+    "Đã gửi OTP"
+)

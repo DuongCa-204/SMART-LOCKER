@@ -24,10 +24,10 @@ class BeginController(QMainWindow):
             label.setCursor(Qt.CursorShape.PointingHandCursor)
             label.original_style = label.styleSheet()
 
-        self.service_button.clicked.connect(self.go_to_service)
+        # self.service_button.clicked.connect(self.go_to_service)
         self.login_b.clicked.connect(self.go_to_login)
         self.sign_in.clicked.connect(self.go_to_sign_in)
-
+        self.service_button.clicked.connect(self.go_to_service)
         # Load QSS
         try:
             with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as f:
@@ -35,8 +35,8 @@ class BeginController(QMainWindow):
         except FileNotFoundError:
             print("Lưu ý: Không tìm thấy file QSS!")
 
-    def go_to_service(self):
-        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(10))
+    # def go_to_service(self):
+    #     QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(10))
 
     def go_to_login(self):
         QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(1))
@@ -44,6 +44,8 @@ class BeginController(QMainWindow):
     def go_to_sign_in(self):
         QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(2))
 
+    def go_to_service(self):
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(13))
 
         # Load SVG vào label — chỉnh width/height theo kích thước thực tế
         self._set_icon(self.login_b,  "D:/SML/app/assets/icon/feather-main/icons/airplay.svg",  120, 40)
