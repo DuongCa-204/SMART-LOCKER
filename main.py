@@ -24,7 +24,7 @@ from app.controllers.password_controller import PassWordController
 from app.controllers.service_controller import ServiceController
 from app.controllers.GUI_DO import SelectMode_GUIDOController
 from app.controllers.send_otp_controller import SendEmailController
-from app.controllers.enter_otp_controller import EnterEmailController
+from app.controllers.enter_otp_controller import EnterOtpController
 from app.controllers.service_controller import ServiceController
 from app.controllers.menu_service import MenuServiceController
 from app.database.database import Database
@@ -84,7 +84,7 @@ password_page = PassWordController(stacked_widget)
 service_page = ServiceController(stacked_widget)
 select_guido = SelectMode_GUIDOController(stacked_widget, loading_page, success_page)
 sendOTP_page = SendEmailController(stacked_widget)
-enterOTP_page = EnterEmailController(stacked_widget)
+enterOTP_page = EnterOtpController(stacked_widget)
 service_page = ServiceController(stacked_widget)
 menu_service = MenuServiceController(stacked_widget, loading_page, success_page)
 # ADD PAGE TO STACK

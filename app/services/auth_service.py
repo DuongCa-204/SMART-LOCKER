@@ -21,7 +21,12 @@ class AuthService:
                 False,
                 "Chưa đăng ký tài khoản"
             )
-
+        
+        if user[3] == 0:
+            return (
+                False, "Tài khoản đang chờ phê duyệt"
+            )
+        
         return (
             True,
             "Đăng nhập thành công"

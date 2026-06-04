@@ -213,6 +213,7 @@ class EnterOtpController(QMainWindow):
         self.thong_bao_otp.setText("")
         # ✅ FIX 4: Thêm reset thong_bao_email
         self.thong_bao_email.setText("")
+        # self.time_label.setText("")          # ← xóa trắng trước
         self.update_label()
 
         # Nếu vẫn còn OTP đang đếm thì tiếp tục hiển thị
@@ -223,11 +224,16 @@ class EnterOtpController(QMainWindow):
             if remaining > 0:
                 self.start_countdown()
             else:
-                self.time_label.setText("OTP đã hết hạn")
-                self.send_email.setEnabled(True)
+                # delay nhỏ để trang render xong mới hiện chữ
+                
+                    self.time_label.setText("OTP đã hết hạn"),
+                    self.send_email.setEnabled(True)
+                
         else:
-            self.time_label.setText("Chưa có OTP")
-            self.send_email.setEnabled(True)
+            
+                self.time_label.setText("Chưa có OTP"),
+                self.send_email.setEnabled(True)
+            
 
         super().showEvent(event)
 
