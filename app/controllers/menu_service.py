@@ -33,6 +33,7 @@ class MenuServiceController(QMainWindow):
 
         self.back.clicked.connect(self.go_back)
         self.chon_tu.clicked.connect(self.confirm_action)
+        self.lock.clicked.connect(self.maintenance_action)
 
     # ================= STYLE =================
     def load_style(self):
@@ -75,13 +76,29 @@ class MenuServiceController(QMainWindow):
     # ================= LOAD STATUS =================
     def load_locker_status(self):
         """
-        Setup các tủ để test
-        Vì đây chỉ là test, tất cả tủ đều available
+        Load trạng thái tủ từ database
+        Hiển thị màu tương ứng: xanh (available) hoặc vàng (maintenance)
         """
-        # Loop qua tất cả button đã tạo
+        # Lấy danh sách tủ từ database
+        lockers = self.locker_service.get_all_lockers()
+        
         for button in self.locker_buttons:
-            # Đặt tất cả button thành trạng thái available (xanh)
-            button.set_available()
+            # Tìm trạng thái của tủ này
+            for locker_id, status, holder in lockers:
+                try:
+                    ui_index = int(locker_id[1:])
+                    if ui_index == button.locker_id.split('L')[1] or ui_index == int(button.locker_id[1:]):
+                        
+                        if status == "maintenance":
+                            # Tủ đang bảo trì → màu vàng
+                            button.set_my_locker()  # ✅ Dùng set_my_locker() để thành vàng
+                        else:
+                            # Tủ bình thường → màu xanh
+                            button.set_available()
+                        break
+                except:
+                    # Nếu lỗi, mặc định set available
+                    button.set_available()
     # ================= EVENT =================
     def showEvent(self, event):
         """
@@ -130,24 +147,97 @@ class MenuServiceController(QMainWindow):
         ktv_id = Session.ktv_id  # ✅ ID KTV (ví dụ: "KTV001")
         ktv_name = Session.ktv_name  # ✅ Tên KTV (ví dụ: "Kỹ Thuật Viên")
         
-        # 3. Gọi service để mở tủ
-        # ❓ TODO: Sửa dòng này - hiện tại nó dùng `user` và `name`
-        # self.locker_service.set_status_locker(user, locker_id, name)
-        # ✅ Sửa thành:
-        self.locker_service.set_status_locker(ktv_id, locker_id, ktv_name)
+        try:
+            # Gọi service để mở tủ
+            #self.locker_service.set_status_locker(ktv_id, locker_id, ktv_name)
+            
+            # ========== THÊM: GHI LOG ==========
+            self.locker_service.insert_service_log(
+                locker_id=locker_id,
+                ktv_id=ktv_id,
+                ktv_name=ktv_name,
+                action="OPEN_TEST"  # ✅ Ghi hành động
+            )
+            # ===================================
+            
+            # Show MessageBox thành công
+            QMessageBox.information(
+                self,
+                "Thành công",
+                f"Mở tủ {locker_id} thành công!"
+            )
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Lỗi", f"Lỗi khi mở tủ: {str(e)}")
         
-        # 4. Show MessageBox thành công
-        QMessageBox.information(
-            self,
-            "Thành công",
-            f"Mở tủ {locker_id} thành công!"
-        )
-        
-        # 5. Reset form
-        self.reset_form()
-        self.load_locker_status()
-        # ==========================================
+        finally:
+            # Reset form
+            self.reset_form()
+            self.load_locker_status()
     
+    def maintenance_action(self):
+        """
+        Khi user nhấn nút LOCK/UNLOCK - chuyển trạng thái bảo trì
+        """
+        
+        # 1. Validation: Có chọn tủ chưa?
+        if not Session.selected_locker:
+            QMessageBox.warning(self, "Lỗi", "Vui lòng chọn tủ!")
+            return
+        
+        # 2. Lấy thông tin
+        locker_id = Session.selected_locker
+        ktv_id = Session.ktv_id
+        ktv_name = Session.ktv_name
+        
+        # 3. Kiểm tra trạng thái hiện tại để quyết định action
+        # TODO: Lấy trạng thái tủ từ database
+        # Để check xem nó là available hay maintenance
+        # Nếu available → lock (chuyển sang maintenance)
+        # Nếu maintenance → unlock (chuyển sang available)
+        
+        current_status, _ = self.locker_service.get_locker_status(locker_id)
+        
+        try:
+            if current_status == "empty" or current_status == "Busy":
+                # Chuyển sang MAINTENANCE (LOCK)
+                new_status = "maintenance"
+                action = "LOCK"
+                message = f"Tủ {locker_id} đã chuyển sang bảo trì!"
+                
+            elif current_status == "maintenance":
+                # Chuyển sang AVAILABLE (UNLOCK)
+                new_status = "empty"
+                action = "UNLOCK"
+                message = f"Tủ {locker_id} trở lại bình thường!"
+                
+            else:
+                QMessageBox.warning(self, "Lỗi", f"Trạng thái tủ không xác định: {current_status}")
+                return
+            
+            # 4. Cập nhật database
+            self.locker_service.update_locker_maintenance(locker_id, new_status)
+            
+            # 5. Ghi log
+            self.locker_service.insert_service_log(
+                locker_id=locker_id,
+                ktv_id=ktv_id,
+                ktv_name=ktv_name,
+                action=action
+            )
+            
+            # 6. Show thông báo thành công
+            QMessageBox.information(self, "Thành công", message)
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Lỗi", f"Lỗi: {str(e)}")
+        
+        finally:
+            # 7. Reset và reload
+            self.reset_form()
+            self.load_locker_status()
+
+
     def go_to_begin(self):
         """Quay lại trang BEGIN"""
         self.stacked_widget.setCurrentIndex(0)

@@ -185,3 +185,18 @@ class LockerService:
     def check_user_has_locker(self, mssv):
 
         return self.locker_repo.get_user_locker(mssv)
+
+    def insert_service_log(self, locker_id, ktv_id, ktv_name, action):
+        """
+        Ghi log hành động của service engineer
+        """
+        return self.locker_repo.insert_service_log(
+            locker_id, ktv_id, ktv_name, action
+        )
+    
+    
+    def update_locker_maintenance(self, locker_id, status):
+        """
+        Gọi repository để cập nhật trạng thái bảo trì
+        """
+        return self.locker_repo.update_locker_maintenance(locker_id, status)

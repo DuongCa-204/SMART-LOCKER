@@ -3,6 +3,7 @@ from PyQt6 import uic
 from PyQt6.QtCore import QUrl
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
+from pathlib import Path
 
 class SuccessController(QMainWindow):
 
@@ -27,6 +28,7 @@ class SuccessController(QMainWindow):
         # 📼 Load video
         video_path = "app/assets/gif/success.mp4"
         self.player.setSource(QUrl.fromLocalFile(video_path))
+
 
         # 🔁 loop video
         self.player.mediaStatusChanged.connect(self.loop_video)

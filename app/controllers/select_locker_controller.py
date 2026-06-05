@@ -101,7 +101,9 @@ class SelectLockerController(QMainWindow):
             if status == "empty":
 
                 button.set_available()
-
+                
+            elif status == "maintenance":
+                button.set_my_locker()
             # Tủ của mình
             elif holder == current_user:
 

@@ -55,10 +55,10 @@ MY LOCKER
 
 QPushButton[lockerState="mylocker"] {
 
-    background-color: #f39c12;
+    background-color: #f3e412;
     color: white;
 
-    border: 2px solid #d68910;
+    border: 2px solid #d6c210;
     border-radius: 12px;
 
     font-weight: bold;

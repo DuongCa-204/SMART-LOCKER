@@ -7,6 +7,7 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal, QUrl
 from PyQt6.QtMultimediaWidgets import *
+from pathlib import Path
 
 class VideoScreenController(QMainWindow):
 

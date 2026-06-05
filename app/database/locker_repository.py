@@ -199,3 +199,61 @@ class LockerRepository:
         conn.commit()
 
         conn.close()
+    def insert_service_log(self, locker_id, ktv_id, ktv_name, action):
+        """
+        Ghi log khi KTV thực hiện hành động (mở/khóa/test tủ)
+        
+        Args:
+            locker_id: ID tủ (ví dụ: "L01")
+            ktv_id: ID KTV (ví dụ: "KTV001")
+            ktv_name: Tên KTV
+            action: Hành động (OPEN, LOCK, TEST)
+        """
+        try:
+            conn = self.db.connect()
+            cursor = conn.cursor()
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            cursor.execute(
+                """
+                INSERT INTO Service_engineer_log
+                (locker_id, ktv_id, ktv_name, action, timestamp)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (locker_id, ktv_id, ktv_name, action, now)
+            )
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error inserting service log: {e}")
+            return False
+    def update_locker_maintenance(self, locker_id, status):
+        """
+        Cập nhật trạng thái bảo trì của tủ
+        
+        Args:
+            locker_id: ID tủ (ví dụ: "L01")
+            status: "maintenance" hoặc "available"
+        """
+        try:
+            conn = self.db.connect()
+            cursor = conn.cursor()
+            
+            cursor.execute(
+                """
+                UPDATE Lockers SET status = ?
+                WHERE locker_id = ?
+                """,
+                (status, locker_id)
+            )
+            
+            conn.commit()
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error updating locker maintenance: {e}")
+            return False
