@@ -27,6 +27,7 @@ class AuthService:
                 False, "Tài khoản đang chờ phê duyệt"
             )
         
+        self.user_repo.update_account_status(mssv)
         return (
             True,
             "Đăng nhập thành công"

@@ -27,6 +27,7 @@ from app.controllers.send_otp_controller import SendEmailController
 from app.controllers.enter_otp_controller import EnterOtpController
 from app.controllers.service_controller import ServiceController
 from app.controllers.menu_service import MenuServiceController
+from app.services.cleanup_service import CleanupService
 from app.database.database import Database
 from app.database.locker_repository import LockerRepository
 from PyQt6.QtGui import QMovie
@@ -34,7 +35,7 @@ from PyQt6.QtGui import QMovie
 
 
 app = QApplication(sys.argv)
-
+cleanup_service = CleanupService()
 
 
 ######   TIMERS
@@ -73,9 +74,9 @@ stacked_widget = QStackedWidget()
 
 begin_page = BeginController(stacked_widget)
 login_page = LoginController(stacked_widget)
-register_page = RegisterController(stacked_widget)
 loading_page = LoadingController()
 success_page = SuccessController()
+register_page = RegisterController(stacked_widget, loading_page, success_page)
 select_page = SelectLockerController(stacked_widget, loading_page, success_page)
 select_mode = SelectModeController(stacked_widget, loading_page, success_page)
 video_page = VideoScreenController(stacked_widget)
@@ -128,7 +129,7 @@ def show_begin():
 # cleanup_users()
 video_page.touched.connect(show_begin)
 idle_timer.timeout.connect(back_to_video)
-# timer_cleanup.timeout.connect(cleanup_users)
+timer_cleanup.timeout.connect(cleanup_service.cleanup_users)
 
 
 

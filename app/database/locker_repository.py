@@ -146,10 +146,16 @@ class LockerRepository:
                         )
                    
             cursor.execute("""
-                            INSERT INTO Locker_access_log 
-                            (locker_id, mssv, timestamp, event, name)
-                            VALUES (?, ?, ?, ?, ?)""", 
-                            (locker_id, user, now, 'BORROW', name))
+                        INSERT INTO Locker_access_log 
+                        (locker_id, mssv, timestamp, event, name)
+                        VALUES (?, ?, ?, ?, ?)""", 
+                        (locker_id, user, now, 'BORROW', name))
+            cursor.execute("""
+                        UPDATE Users SET 
+                        last_active_time = ? 
+                        WHERE mssv =? """,
+                        (now, user,)
+                        )
             conn.commit()
 
             return True
@@ -176,15 +182,7 @@ class LockerRepository:
                        WHERE locker_id = ? """,
                        (locker_id,)
                        )
-        # cursor.execute("""
-        #                UPDATE LOCKER_USAGE SET
-        #                END_TIME = ?, 
-        #                STATUS = "Completed"
-        #                WHERE LOCKER_ID = ?
-        #                AND MSSV = ?
-        #                AND END_TIME IS NULL """,
-        #                (now, locker_id, user)
-        #                )
+
         cursor.execute("""
                        UPDATE Users SET 
                        last_active_time = ? 
@@ -199,6 +197,7 @@ class LockerRepository:
         conn.commit()
 
         conn.close()
+
     def insert_service_log(self, locker_id, ktv_id, ktv_name, action):
         """
         Ghi log khi KTV thực hiện hành động (mở/khóa/test tủ)
@@ -257,3 +256,4 @@ class LockerRepository:
         except Exception as e:
             print(f"Error updating locker maintenance: {e}")
             return False
+

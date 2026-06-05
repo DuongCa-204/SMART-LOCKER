@@ -21,13 +21,15 @@ from app.widgets.virtual_keyboard import VirtualKeyboard
 
 class RegisterController(QMainWindow):
 
-    def __init__(self,stacked_widget):
+    def __init__(self,stacked_widget, loading_page, success_page):
 
         super().__init__()
 
         uic.loadUi("app/ui/test_keyboard.ui", self)
         self.load_style()
         self.stacked_widget = stacked_widget
+        self.loading_page = loading_page
+        self.success_page = success_page
 
         self.auth_service = AuthService()
 
@@ -38,16 +40,7 @@ class RegisterController(QMainWindow):
             self.keyboard,
             alignment=Qt.AlignmentFlag.AlignTop
         )
-        # self.scrollArea.verticalScrollBar().setStyleSheet("""
-        # QScrollBar:vertical{
-        #     width:80px;
-        #     background:red;
-        # }
-        # QScrollBar::handle:vertical{
-        #     background:green;
-        # }
-        # """)
-        # self.keyboard.hide()
+
 
         ############ EVENT  #################
         self.fullname.installEventFilter(self)
@@ -87,24 +80,32 @@ class RegisterController(QMainWindow):
 
         success, message = self.auth_service.register(mssv, name, email, password)
 
-        if success:
+        if not success:
 
-            Session.user_name = name
-        #     self.thong_bao_reg.setStyleSheet(
-        #         "color: green;"
-        #     )
+            self.thong_bao_reg.setStyleSheet(
+                "color: red;"
+            )
 
-        #     self.thong_bao_reg.setText(message)
+            self.thong_bao_reg.setText(message)
 
-        #     QTimer.singleShot(1000, self.go_to_login)
+        # ===== HIỆN LOADING =====
+        else:
+            self.loading_page.set_message(
+                "Đang tiến hành đăng kí !!"
+            )
 
-        # else:
+            self.stacked_widget.setCurrentWidget(
+                self.loading_page
+            )
 
-        #     self.thong_bao_reg.setStyleSheet(
-        #         "color: red;"
-        #     )
+            # ===== SAU 1 GIÂY =====
 
-        #     self.thong_bao_reg.setText(message)
+            QTimer.singleShot(2000,lambda: self.show_success(
+                "Đăng kí thành công",
+                self.go_to_begin
+                )
+            )
+
 
     def eventFilter(self, source, event):
 
@@ -170,3 +171,29 @@ class RegisterController(QMainWindow):
         )
 
 
+    def show_success(
+        self,
+        message,
+        next_function,
+        delay= 2000
+    ):
+
+        self.success_page.set_message(
+            message
+        )
+
+        self.stacked_widget.setCurrentWidget(
+            self.success_page
+        )
+
+        QTimer.singleShot(
+            delay,
+            next_function
+        )
+
+    def go_to_begin(self):
+        self.stacked_widget.setCurrentIndex(0)
+        self.reset_form()
+
+    def reset_form(self):
+        self.thong_bao_reg.setText("")

@@ -386,7 +386,7 @@
                   <widget class="QPushButton" name="register_b">
                    <property name="geometry">
                     <rect>
-                     <x>410</x>
+                     <x>610</x>
                      <y>10</y>
                      <width>141</width>
                      <height>61</height>
@@ -394,6 +394,30 @@
                    </property>
                    <property name="text">
                     <string>REGISTER</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="thong_bao_reg">
+                   <property name="geometry">
+                    <rect>
+                     <x>330</x>
+                     <y>20</y>
+                     <width>241</width>
+                     <height>41</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Times New Roman</family>
+                     <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
                    </property>
                   </widget>
                  </widget>

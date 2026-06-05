@@ -3,6 +3,7 @@ from PyQt6 import uic
 
 from app.utils.session import Session
 from app.services.auth_service import AuthService
+from app.services.locker_service import LockerService
 from app.widgets.virtual_keyboard import VirtualKeyboard
 from PyQt6.QtCore import QTimer, QEvent, Qt
 
@@ -17,6 +18,7 @@ class LoginController(QMainWindow):
         self.stacked_widget = stacked_widget
 
         self.auth_service = AuthService()
+        self.locker_service = LockerService()
 
         ########### SETUP BÀN PHÍM ###########
         self.keyboard = VirtualKeyboard()

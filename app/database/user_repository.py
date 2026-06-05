@@ -129,3 +129,92 @@ class UserRepository:
 
         return None
 
+
+    ####################################################################
+    ########################  CLEAN UP USER  ###########################
+    ####################################################################
+
+
+    def get_inactive_users(self):
+
+        conn = self.db.connect()
+
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT email, mssv
+            FROM Users
+            WHERE datetime(last_active_time)
+                  < datetime('now','localtime','-2 minutes')
+        """)
+
+        result = cursor.fetchall()
+
+        conn.close()
+
+        return result
+    
+
+    def mark_inactive(self):
+
+        conn = self.db.connect()
+
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE Users
+            SET account_status = 'INACTIVE'
+            WHERE account_status = 'ACTIVE'
+            AND datetime(last_active_time)
+                < datetime('now','localtime','-2 minutes')
+        """)
+
+        conn.commit()
+        conn.close()
+
+    def delete_expired_users(self):
+
+        conn = self.db.connect()
+
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            DELETE FROM Users
+            WHERE account_status = 'INACTIVE'
+            AND datetime(last_active_time)
+                < datetime('now','localtime','-5 minutes')
+        """)
+
+        conn.commit()
+
+        conn.close()
+
+
+
+    ####################################################################
+    ########################  CLEAN UP USER  ###########################
+    ####################################################################
+
+
+    def update_account_status(self,mssv):
+
+        conn = self.db.connect()
+
+        cursor = conn.cursor()
+
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        cursor.execute(
+            """
+            UPDATE Users SET
+            account_status = 'ACTIVE'
+            WHERE mssv = ?
+            """,
+            (
+                mssv,
+            )
+        )
+
+        conn.commit()
+
+        conn.close()

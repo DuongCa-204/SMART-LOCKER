@@ -78,6 +78,8 @@ class LockerService:
         # TODO:
         # gửi lệnh mở tủ cho ESP32
 
+        self.user_repo.update_account_status(mssv)
+
         self.locker_repo.insert_access_log(
             locker_id,
             mssv,
@@ -109,9 +111,9 @@ class LockerService:
         # TODO:
         # kiểm tra trạng thái đóng cửa
 
+        self.user_repo.update_account_status(mssv)
+
         self.locker_repo.TRATU(mssv, locker_id, name)
-
-
 
         return (
             True,
@@ -174,13 +176,13 @@ class LockerService:
 
         return self.locker_repo.set_status_locker(user, locker_id, name)
     
-    def last_active_time(self,mssv, locker_id, name):
+    # def last_active_time(self,mssv, locker_id, name):
 
-        return self.locker_repo.insert_access_log(
-            locker_id,
-            mssv,
-            "BORROW",
-            name)
+    #     return self.locker_repo.insert_access_log(
+    #         locker_id,
+    #         mssv,
+    #         "BORROW",
+    #         name)
 
     def check_user_has_locker(self, mssv):
 
@@ -200,3 +202,4 @@ class LockerService:
         Gọi repository để cập nhật trạng thái bảo trì
         """
         return self.locker_repo.update_locker_maintenance(locker_id, status)
+
