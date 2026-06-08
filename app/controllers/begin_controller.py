@@ -11,6 +11,21 @@ class BeginController(QMainWindow):
         uic.loadUi("app/ui/test_bg.ui", self)
         self.stacked_widget = stacked_widget
 
+        ########### SETUP BUTTON ###########
+        for btn in [self.login_b, self.sign_in, self.service_button]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
         # EVENT
         self.login_b.clicked.connect(self.go_to_login)
         self.sign_in.clicked.connect(self.go_to_sign_in)

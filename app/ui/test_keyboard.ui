@@ -49,7 +49,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QScrollArea" name="scrollArea">
+      <widget class="TouchScrollArea" name="scrollArea">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -78,7 +78,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-200</y>
+          <y>-89</y>
           <width>998</width>
           <height>498</height>
          </rect>
@@ -309,6 +309,12 @@
                        <height>60</height>
                       </size>
                      </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>600</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
                      <property name="placeholderText">
                       <string>FULLNAME</string>
                      </property>
@@ -320,6 +326,12 @@
                       <size>
                        <width>0</width>
                        <height>60</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>600</width>
+                       <height>16777215</height>
                       </size>
                      </property>
                      <property name="placeholderText">
@@ -335,6 +347,12 @@
                        <height>60</height>
                       </size>
                      </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>600</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
                      <property name="placeholderText">
                       <string>EMAIL</string>
                      </property>
@@ -346,6 +364,12 @@
                       <size>
                        <width>0</width>
                        <height>60</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>600</width>
+                       <height>16777215</height>
                       </size>
                      </property>
                      <property name="placeholderText">
@@ -474,6 +498,14 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TouchScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>app/widgets/touch_scroll_area.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

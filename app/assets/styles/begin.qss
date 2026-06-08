@@ -41,9 +41,9 @@ QPushButton#sign_in {
 
 QPushButton#sign_in:pressed,
 QPushButton#sign_in:checked {
-    background: #e0f2f1;
-    border-color: #004D40;
-    color: #004D40;
+    background: #65cbe4;
+    border-color: #295490;
+    color: #1f5eac;
     padding-top: 18px;
 }
 

@@ -29,6 +29,24 @@ class PassWordController(QMainWindow):
         )
         self.keyboard.hide()
 
+
+        ########### SETUP BUTTON ###########
+        for btn in [self.back_auth_method, self.next_mode]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
+
         ########### EVENT ############
         self.pass_account.installEventFilter(self)
         self.back_auth_method.clicked.connect(self.go_to_begin)

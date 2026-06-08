@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy
 )
 from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtCore import Qt
+
 
 class VirtualKeyboard(QWidget):
     def __init__(self):
@@ -23,7 +23,7 @@ class VirtualKeyboard(QWidget):
         self.setFixedWidth(1000)
 
         # ===== STYLE nền =====
-        self.load_style()
+        # self.load_style()
 
         self.build_keyboard()
 
@@ -139,10 +139,10 @@ class VirtualKeyboard(QWidget):
             self.main_layout.addLayout(row_layout)
 
     # ================= STYLE =================
-    def load_style(self):
-        # Thêm encoding='utf-8' vào đây
-        with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
-            self.setStyleSheet(file.read())
+    # def load_style(self):
+    #     # Thêm encoding='utf-8' vào đây
+    #     with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
+    #         self.setStyleSheet(file.read())
 
 
     # ================= HIỂN THỊ CHỮ HOA =================

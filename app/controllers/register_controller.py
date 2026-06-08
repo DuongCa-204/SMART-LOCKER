@@ -17,7 +17,7 @@ from app.utils.session import Session
 from app.services.locker_service import LockerService
 from app.services.auth_service import AuthService
 from app.widgets.virtual_keyboard import VirtualKeyboard
-
+from app.widgets.touch_scroll_area import TouchScrollArea
 
 class RegisterController(QMainWindow):
 
@@ -26,7 +26,7 @@ class RegisterController(QMainWindow):
         super().__init__()
 
         uic.loadUi("app/ui/test_keyboard.ui", self)
-        self.load_style()
+        # self.load_style()
         self.stacked_widget = stacked_widget
         self.loading_page = loading_page
         self.success_page = success_page
@@ -40,6 +40,24 @@ class RegisterController(QMainWindow):
             self.keyboard,
             alignment=Qt.AlignmentFlag.AlignTop
         )
+
+
+        ########### SETUP BUTTON ###########
+        for btn in [self.back_begin, self.register_b]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
 
 
         ############ EVENT  #################
@@ -64,12 +82,12 @@ class RegisterController(QMainWindow):
         self.mssv_reg.clear()
         self.email_reg.clear()
         self.pass_reg.clear()
-        # self.thong_bao_reg.setText("")
+        self.thong_bao_reg.setText("")
 
-    def load_style(self):
-        # Thêm encoding='utf-8' vào đây
-        with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
-            self.setStyleSheet(file.read())
+    # def load_style(self):
+    #     # Thêm encoding='utf-8' vào đây
+    #     with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
+    #         self.setStyleSheet(file.read())
 
     def register_account(self):
 
@@ -191,9 +209,3 @@ class RegisterController(QMainWindow):
             next_function
         )
 
-    def go_to_begin(self):
-        self.stacked_widget.setCurrentIndex(0)
-        self.reset_form()
-
-    def reset_form(self):
-        self.thong_bao_reg.setText("")
