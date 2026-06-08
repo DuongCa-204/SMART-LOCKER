@@ -29,7 +29,7 @@ class SelectLockerController(QMainWindow):
 
         # self.load_locker_status()
 
-        self.back_mode.clicked.connect(self.go_to_mode)
+        self.back_mode.clicked.connect(self.go_to_begin)
         self.chon_tu.clicked.connect(self.confirm_action)
 
     # ================= STYLE =================
@@ -103,7 +103,7 @@ class SelectLockerController(QMainWindow):
                 button.set_available()
                 
             elif status == "maintenance":
-                button.set_my_locker()
+                button.set_maintenance()
             # Tủ của mình
             elif holder == current_user:
 

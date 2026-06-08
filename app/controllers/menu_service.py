@@ -115,8 +115,6 @@ class MenuServiceController(QMainWindow):
         """
         Xử lý khi user click chọn tủ
         """
-        # Vì đây là test, tất cả button đều enabled, nên không cần check
-        # Nhưng vẫn kiểm tra để an toàn
         if not button_obj.isEnabled():
             return
         
@@ -125,9 +123,19 @@ class MenuServiceController(QMainWindow):
         
         # Highlight tủ được chọn
         Session.selected_locker = locker_id
-        button_obj.set_selected()
         
-        # Update thông báo (nếu có label)
+        # ========== THÊM: Check xem tủ maintenance không ==========
+        current_status, _ = self.locker_service.get_locker_status(locker_id)
+        
+        if current_status == "maintenance":
+            # Nếu là maintenance → set màu cam đậm
+            button_obj.set_selected_maintenance()
+        else:
+            # Ngược lại → set màu xanh bình thường
+            button_obj.set_selected()
+        # =========================================================
+        
+        # Update thông báo
         self.thong_bao_tu.setText(f"Đã chọn tủ {locker_id}")
         self.thong_bao_tu.setStyleSheet("color: #00796B;")
     

@@ -141,3 +141,30 @@ QPushButton[lockerState="maintenance"]:checked {
     );
     padding-top: 4px;
 }
+/* =========================
+MAINTENANCE SELECTED
+========================= */
+QPushButton[lockerState="maintenance_selected"] {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FB8C00,
+        stop:1 #E65100
+    );
+    color: white;
+    border: 2px solid #BF360C;
+    border-radius: 16px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+QPushButton[lockerState="maintenance_selected"]:pressed,
+QPushButton[lockerState="maintenance_selected"]:checked {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #E65100,
+        stop:1 #BF360C
+    );
+    padding-top: 4px;
+}

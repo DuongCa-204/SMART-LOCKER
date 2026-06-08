@@ -75,9 +75,42 @@ class LockerButton(QPushButton):
 
         self.refresh_style()
 
+    # ========================= 
+# MAINTENANCE
+# =========================
+    def set_maintenance(self):
+        """
+        Trạng thái bảo trì - màu vàng, KHÔNG thể click
+        """
+        self.setEnabled(False)  # ✅ DISABLED - không thể click
+        
+        self.setProperty(
+            "lockerState",
+            "mylocker"  # Dùng style mylocker để thành vàng
+        )
+        
+        self.refresh_style()
     # =========================
     # REFRESH STYLE
     # =========================
+    # =========================
+# MAINTENANCE SELECTED
+# =========================
+    def set_selected_maintenance(self):
+        """
+        Trạng thái bảo trì được chọn - màu cam đậm
+        """
+        self.setEnabled(True)
+        
+        self.setProperty(
+            "lockerState",
+            "maintenance_selected"
+        )
+        
+        self.refresh_style()
+
+
+        
     def refresh_style(self):
 
         self.style().unpolish(self)

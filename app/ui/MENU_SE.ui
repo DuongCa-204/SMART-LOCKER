@@ -664,7 +664,7 @@ QPushButton:checked {
 }</string>
     </property>
     <property name="text">
-     <string>LOCK</string>
+     <string>LOCK/UNLOCK</string>
     </property>
    </widget>
    <widget class="QPushButton" name="test">

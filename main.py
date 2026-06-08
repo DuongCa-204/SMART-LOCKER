@@ -164,7 +164,6 @@ stacked_widget.setFixedWidth(1024)
 stacked_widget.setCurrentIndex(7)
 
 
-stacked_widget.showFullScreen()
-
+stacked_widget.show()
 
 sys.exit(app.exec())

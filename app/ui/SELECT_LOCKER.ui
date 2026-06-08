@@ -245,8 +245,8 @@ QPushButton:checked {
     </property>
     <property name="minimumSize">
      <size>
-      <width>140</width>
-      <height>80</height>
+      <width>124</width>
+      <height>84</height>
      </size>
     </property>
     <property name="font">
@@ -312,8 +312,8 @@ QPushButton:checked {
     </property>
     <property name="minimumSize">
      <size>
-      <width>140</width>
-      <height>80</height>
+      <width>124</width>
+      <height>84</height>
      </size>
     </property>
     <property name="font">
@@ -373,8 +373,8 @@ QPushButton:checked {
     </property>
     <property name="minimumSize">
      <size>
-      <width>140</width>
-      <height>80</height>
+      <width>124</width>
+      <height>84</height>
      </size>
     </property>
     <property name="font">
@@ -440,8 +440,8 @@ QPushButton:checked {
     </property>
     <property name="minimumSize">
      <size>
-      <width>80</width>
-      <height>80</height>
+      <width>64</width>
+      <height>64</height>
      </size>
     </property>
     <property name="font">
@@ -501,8 +501,8 @@ QPushButton:checked {
     </property>
     <property name="minimumSize">
      <size>
-      <width>140</width>
-      <height>80</height>
+      <width>124</width>
+      <height>84</height>
      </size>
     </property>
     <property name="font">
@@ -630,8 +630,8 @@ QPushButton:checked {
    <widget class="QLabel" name="thong_bao_tu">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>470</y>
+      <x>540</x>
+      <y>420</y>
       <width>281</width>
       <height>41</height>
      </rect>
@@ -643,7 +643,7 @@ QPushButton:checked {
    <widget class="QPushButton" name="back_mode">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>630</x>
       <y>270</y>
       <width>140</width>
       <height>84</height>
@@ -658,7 +658,7 @@ QPushButton:checked {
     <property name="minimumSize">
      <size>
       <width>124</width>
-      <height>50</height>
+      <height>84</height>
      </size>
     </property>
     <property name="font">
@@ -706,6 +706,136 @@ QPushButton:checked {
     <property name="text">
      <string>BACK</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>80</y>
+      <width>261</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Chú thích</string>
+    </property>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>24</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #66bb6a; 
+border-radius: 4px; 
+min-width: 24px; 
+max-width: 24px; 
+min-height: 24px; 
+max-height: 24px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>24</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #e53935; 
+border-radius: 4px; 
+min-width: 24px; 
+max-width: 24px; 
+min-height: 24px; 
+max-height: 24px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>24</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #F9A825; 
+border-radius: 4px; 
+min-width: 24px; 
+max-width: 24px; 
+min-height: 24px; 
+max-height: 24px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>70</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tủ đang được dùng</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>110</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tủ đang bảo trì</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>30</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tủ trống</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
