@@ -22,18 +22,36 @@ class AuthMethodController(QMainWindow):
 
         self.locker_service = LockerService()
 
+
+        ########### SETUP BUTTON ###########
+        for btn in [self.pass_select, self.recog_select]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
+
+        ########### EVENT ############
         self.pass_select.clicked.connect(self.go_to_password)
         self.recog_select.clicked.connect(self.go_to_sign_in)
 
     def go_to_password(self):
 
-        self.stacked_widget.setCurrentIndex(9)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(9))
 
     def go_to_sign_in(self):
 
-        self.stacked_widget.setCurrentIndex(2)
-
-
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(2))
+ 
 
 
 

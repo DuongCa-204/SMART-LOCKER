@@ -49,7 +49,7 @@ class PassWordController(QMainWindow):
 
         ########### EVENT ############
         self.pass_account.installEventFilter(self)
-        self.back_auth_method.clicked.connect(self.go_to_begin)
+        self.back_auth_method.clicked.connect(self.go_to_auth_method)
         self.next_mode.clicked.connect(self.password_account)
 
 
@@ -86,12 +86,12 @@ class PassWordController(QMainWindow):
 
 
     def go_to_enterOTP(self):
-        self.stacked_widget.setCurrentIndex(11)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(11)) 
         self.reset_form()
 
-    def go_to_begin(self):
+    def go_to_auth_method(self):
 
-        self.stacked_widget.setCurrentIndex(0)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(8))
         self.reset_form()
 
     def reset_form(self):
