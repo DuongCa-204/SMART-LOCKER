@@ -46,7 +46,7 @@ class CleanupService:
         </body>
         </html>
         """
-        msg.attach(MIMEText(html, "html"))
+        msg.attach(MIMEText(html,"html","utf-8"))
 
         server = smtplib.SMTP(
             "smtp.gmail.com",
@@ -63,45 +63,35 @@ class CleanupService:
         server.sendmail(
             sender,
             email,
-            msg
+            msg.as_string()
         )
 
         server.quit()
 
+
     def cleanup_users(self):
-
         try:
-
-            users = (
-                self.user_repo
-                .get_inactive_users()
-            )
-
-            for email, mssv in users:
-
-                try:
-
-                    self.send_warning_email(
-                        email,
-                        mssv
-                    )
-
-                except Exception as e:
-
-                    print(
-                        f"Lỗi gửi mail {mssv}: {e}"
-                    )
-
-            self.user_repo.mark_inactive()
-
+            # 1. Xóa user đã INACTIVE quá lâu trước
             self.user_repo.delete_expired_users()
 
-            print(
-                "Cleanup completed"
-            )
+            # 2. Lấy user chưa được cảnh báo
+            users = self.user_repo.get_inactive_users()
+
+            for email, mssv in users:
+                try:
+                    # 3. Gửi mail cảnh báo
+                    self.send_warning_email(email, mssv)
+                    # 4. Đánh dấu đã gửi mail
+                    self.user_repo.mark_warned(mssv)
+
+                except Exception as e:
+                    print(f"Lỗi gửi mail {mssv}: {e}")
+
+            # 5. Đánh dấu INACTIVE sau khi đã gửi mail
+            self.user_repo.mark_inactive()
+
+            print("Cleanup completed")
 
         except Exception as e:
+            print(f"Cleanup Error: {e}")
 
-            print(
-                f"Cleanup Error: {e}"
-            )

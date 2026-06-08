@@ -1,36 +1,52 @@
-/* Dấu chấm nghĩa là áp dụng cho TẤT CẢ các widget có thuộc tính class="systemButton" */
+/* ================= SYSTEM BUTTON ================= */
 QPushButton.systemButton {
-    background-color: #8eaddd;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00897B,
+        stop:1 #00695C
+    );
     color: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
+    font-family: 'Segoe UI', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    border: 2px solid #33197a; 
+    border: 2px solid #004D40;
     padding: 12px 24px;
+    letter-spacing: 0.5px;
 }
 
-QPushButton.systemButton:pressed, 
+QPushButton.systemButton:pressed,
 QPushButton.systemButton:checked {
-    background-color: #2c3e50 !important;
-    border-color: #1a252f !important;
-    color: #ffffff !important;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00695C,
+        stop:1 #004D40
+    );
+    padding-top: 14px;
 }
 
 
-
-
-
+/* ================= KEYBOARD CONTAINER ================= */
 #keyboard_container {
-    background-color: #dcdcdc;
+    background-color: #ECEFF1;
+    border-top: 2px solid #B0BEC5;
+    border-radius: 12px;
 }
 
+
+/* ================= SCROLLBAR ================= */
 QScrollBar:vertical {
     width: 25px;
     background: #f0f0f0;
+    border-radius: 8px;
 }
 
 QScrollBar::handle:vertical {
-    background: #00796B;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 #00897B,
+        stop:1 #00796B
+    );
     min-height: 40px;
     border-radius: 8px;
 }
@@ -46,41 +62,60 @@ QScrollBar::sub-page:vertical {
 }
 
 
-/* ================= NORMAL BUTTON (Các phím chữ/số trắng) ================= */
+/* ================= NORMAL BUTTON ================= */
 QPushButton#normalButton {
-    background-color: #ffffff;
-    color: #333333;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #ffffff,
+        stop:1 #f5f5f5
+    );
+    color: #212121;
     border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    border: 2px solid #b3b3b3; 
-    padding: 8px; 
+    border: 2px solid #B0BEC5;
+    padding: 8px;
+    letter-spacing: 0.5px;
 }
 
-/* Thêm trạng thái :checked để hỗ trợ màn hình cảm ứng Waveshare */
-QPushButton#normalButton:pressed, 
+QPushButton#normalButton:pressed,
 QPushButton#normalButton:checked {
-    background-color: #2c3e50 !important; /* Chuyển hẳn sang màu xanh đen tối hẳn */
-    border-color: #1a252f !important;
-    color: #ffffff !important;            /* Đổi chữ sang màu trắng để nhìn rõ */
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00897B,
+        stop:1 #00695C
+    );
+    border-color: #004D40;
+    color: #ffffff;
+    padding-top: 10px;
 }
 
 
-/* ================= SPECIAL BUTTON (Các phím SHIFT, ENTER, SPACE xám) ================= */
+/* ================= SPECIAL BUTTON ================= */
 QPushButton#specialButton {
-    background-color: #7f8c8d; 
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #78909C,
+        stop:1 #546E7A
+    );
     color: #ffffff;
     border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    border: 2px solid #616d6e; 
+    border: 2px solid #37474F;
     padding: 8px;
+    letter-spacing: 0.5px;
 }
 
-/* Thêm trạng thái :checked và đẩy tương phản lên tối đa */
-QPushButton#specialButton:pressed, 
+QPushButton#specialButton:pressed,
 QPushButton#specialButton:checked {
-    background-color: #00796B !important; /* Khi nhấn sẽ chuyển sang màu xanh đặc trưng của thanh cuộn */
-    border-color: #004d40 !important;
-    color: #ffffff !important;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00897B,
+        stop:1 #00695C
+    );
+    border-color: #004D40;
+    padding-top: 10px;
 }

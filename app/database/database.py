@@ -1,24 +1,14 @@
 import os
 import sqlite3
 
+# Dùng Path cho rõ ràng và an toàn hơn
+from pathlib import Path
 
 class Database:
-
     def __init__(self):
-
-        BASE_DIR = os.path.dirname(
-            os.path.dirname(
-                os.path.abspath(__file__)
-            )
-        )
-
-        self.path = os.path.join(
-            BASE_DIR,
-            "database",
-            "IntelligentLocker.db"
-        )
-
-
+        self.path = Path(__file__).parent / "IntelligentLocker.db"
+    
     def connect(self):
-
-        return sqlite3.connect(self.path)
+        conn = sqlite3.connect(self.path)
+        conn.execute("PRAGMA foreign_keys = ON")  # Bật kiểm tra FK
+        return conn

@@ -38,6 +38,26 @@ app = QApplication(sys.argv)
 cleanup_service = CleanupService()
 
 
+# ===== LOAD GLOBAL STYLE =====
+def load_global_style():
+    styles = ""
+    qss_files = [
+        "app/assets/styles/keyboard.qss",
+        "app/assets/styles/locker.qss",
+        "app/assets/styles/begin.qss"
+    ]
+    for path in qss_files:
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                styles += f.read() + "\n"
+        except FileNotFoundError:
+            print(f"Không tìm thấy file QSS: {path}")
+    app.setStyleSheet(styles)
+
+load_global_style()  # ← Gọi ngay sau khi tạo app
+# ==============================
+
+
 ######   TIMERS
 idle_timer = QTimer()
 timer_cleanup = QTimer()
@@ -58,10 +78,6 @@ class GlobalFilter(QObject):
 filter = GlobalFilter()
 # cài vào app
 app.installEventFilter(filter)   
-
-
-
-
 
 
 
@@ -148,7 +164,7 @@ stacked_widget.setFixedWidth(1024)
 stacked_widget.setCurrentIndex(7)
 
 
-stacked_widget.show()
+stacked_widget.showFullScreen()
 
 
 sys.exit(app.exec())

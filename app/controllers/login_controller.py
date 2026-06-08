@@ -35,44 +35,50 @@ class LoginController(QMainWindow):
         self.next_login.clicked.connect(self.login_account)
 
 
-# 👉 THÊM: Load file QSS riêng cho màn hình này (nếu file main.py chưa load)
-        try:
-            with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
-                self.setStyleSheet(file.read())
-        except FileNotFoundError:
-            print("Lưu ý: Không tìm thấy file QSS tại đường dẫn quy định!")
+# # 👉 THÊM: Load file QSS riêng cho màn hình này (nếu file main.py chưa load)
+#         try:
+#             with open("app/assets/styles/keyboard.qss", "r", encoding="utf-8") as file:
+#                 self.setStyleSheet(file.read())
+#         except FileNotFoundError:
+#             print("Lưu ý: Không tìm thấy file QSS tại đường dẫn quy định!")
 
 
         # 1. Gom danh sách các nút bằng tên biến logic riêng biệt (Không lo bị trùng)
-        system_buttons = [self.back_login, self.next_login]
-        for btn in system_buttons:
-            # Bật tính năng lưu trạng thái cảm ứng
+        # system_buttons = [self.back_login, self.next_login]
+        # for btn in system_buttons:
+        #     # Bật tính năng lưu trạng thái cảm ứng
+        #     btn.setCheckable(True)
+        #     btn.setAutoExclusive(False)
+            
+        #     # 👉 MẸO QUAN TRỌNG: Gán class "systemButton" để nút tự động ăn theo file QSS
+        #     btn.setProperty("class", "systemButton")
+            
+        #     # Ép Qt vẽ lại giao diện để nhận thuộc tính class vừa gán
+        #     btn.style().unpolish(btn)
+        #     btn.style().polish(btn)
+            
+        #     # 2. Cài đặt QTimer giữ màu 120ms chống trơ trên màn Waveshare
+        #     def create_release_handler(b=btn):
+        #         def safe_clear():
+        #             try:
+        #                 # Nếu nút bấm vẫn còn sống và chưa bị xóa
+        #                 if b and not b.isHidden(): 
+        #                     b.setChecked(False)
+        #             except RuntimeError:
+        #                 # Nếu nút đã bị xóa bởi build_keyboard(), bỏ qua lỗi này an toàn
+        #                 pass
+
+        #         # Giữ màu trong 120ms rồi chạy hàm kiểm tra an toàn ở trên
+        #         QTimer.singleShot(150, safe_clear)
+
+        #     btn.released.connect(create_release_handler)
+  
+# ✅ Đơn giản hơn nhiều
+        for btn in [self.back_login, self.next_login]:
             btn.setCheckable(True)
             btn.setAutoExclusive(False)
-            
-            # 👉 MẸO QUAN TRỌNG: Gán class "systemButton" để nút tự động ăn theo file QSS
-            btn.setProperty("class", "systemButton")
-            
-            # Ép Qt vẽ lại giao diện để nhận thuộc tính class vừa gán
-            btn.style().unpolish(btn)
-            btn.style().polish(btn)
-            
-            # 2. Cài đặt QTimer giữ màu 120ms chống trơ trên màn Waveshare
-            def create_release_handler(b=btn):
-                def safe_clear():
-                    try:
-                        # Nếu nút bấm vẫn còn sống và chưa bị xóa
-                        if b and not b.isHidden(): 
-                            b.setChecked(False)
-                    except RuntimeError:
-                        # Nếu nút đã bị xóa bởi build_keyboard(), bỏ qua lỗi này an toàn
-                        pass
-
-                # Giữ màu trong 120ms rồi chạy hàm kiểm tra an toàn ở trên
-                QTimer.singleShot(150, safe_clear)
-
-            btn.released.connect(create_release_handler)
-            # =======================================================
+  
+        #     # =======================================================
             # =======================================================
             # =======================================================
 
@@ -107,17 +113,23 @@ class LoginController(QMainWindow):
             self.thong_bao.setText(message)
 
     def go_to_auth_method(self):
-        self.stacked_widget.setCurrentIndex(8)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(8))
         self.reset_form()
+        self.reset_buttons()
 
     def go_to_begin(self):
 
-        self.stacked_widget.setCurrentIndex(0)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(0))
         self.reset_form()
+        self.reset_buttons()
 
     def reset_form(self):
         self.mssv.clear()
         self.thong_bao.setText("")
+
+    def reset_buttons(self):
+        for btn in [self.back_login, self.next_login]:
+            btn.setChecked(False)
 
     def eventFilter(self, source, event):
 
@@ -127,15 +139,9 @@ class LoginController(QMainWindow):
         ):
 
             self.keyboard.show()
-
-            self.keyboard.set_target(
-                self.mssv
-            )
+            self.keyboard.set_target(self.mssv)
             self.keyboard.mode = "NUM"
             self.keyboard.build_keyboard()
 
-        return super().eventFilter(
-            source,
-            event
-        )
+        return super().eventFilter(source,event)
     

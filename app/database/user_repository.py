@@ -103,31 +103,24 @@ class UserRepository:
 
             result = cursor.fetchone()
 
-            return result[0]
+            return result[0] if result else None
 
     def get_email_by_mssv(self, mssv):
 
-        conn = self.db.connect()
+        with self.db.connect() as conn:
 
-        cursor = conn.cursor()
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT email
+                FROM Users
+                WHERE mssv = ?
+                """,
+                (mssv,)
+            )
 
-        cursor.execute(
-            """
-            SELECT email
-            FROM Users
-            WHERE mssv = ?
-            """,
-            (mssv,)
-        )
-
-        result = cursor.fetchone()
-
-        conn.close()
-
-        if result:
-            return result[0]
-
-        return None
+            result = cursor.fetchone()
+            return result[0] if result else None
 
 
     ####################################################################
@@ -137,84 +130,85 @@ class UserRepository:
 
     def get_inactive_users(self):
 
-        conn = self.db.connect()
+        with self.db.connect() as conn:
 
-        cursor = conn.cursor()
+            cursor = conn.cursor()
 
-        cursor.execute("""
-            SELECT email, mssv
-            FROM Users
-            WHERE datetime(last_active_time)
-                  < datetime('now','localtime','-2 minutes')
-        """)
+            cursor.execute("""
+                SELECT email, mssv
+                FROM Users
+                WHERE datetime(last_active_time)
+                    < datetime('now','localtime','-2 hours')
+                AND warned_at IS NULL
+                AND account_status = 'ACTIVE'
+            """)
 
-        result = cursor.fetchall()
+            return cursor.fetchall()
 
-        conn.close()
-
-        return result
-    
 
     def mark_inactive(self):
-
-        conn = self.db.connect()
-
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            UPDATE Users
-            SET account_status = 'INACTIVE'
-            WHERE account_status = 'ACTIVE'
-            AND datetime(last_active_time)
-                < datetime('now','localtime','-2 minutes')
-        """)
-
-        conn.commit()
-        conn.close()
+        with self.db.connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE Users
+                SET account_status = 'INACTIVE',
+                    warned_at = NULL
+                WHERE account_status = 'ACTIVE'
+                AND datetime(last_active_time)
+                    < datetime('now','localtime','-2 hours')
+                AND warned_at IS NOT NULL
+            """)
+            conn.commit()
+            
 
     def delete_expired_users(self):
 
-        conn = self.db.connect()
+        with self.db.connect() as conn:
 
-        cursor = conn.cursor()
+            cursor = conn.cursor()
 
-        cursor.execute("""
-            DELETE FROM Users
-            WHERE account_status = 'INACTIVE'
-            AND datetime(last_active_time)
-                < datetime('now','localtime','-5 minutes')
-        """)
+            cursor.execute("""
+                DELETE FROM Users
+                WHERE account_status = 'INACTIVE'
+                AND datetime(last_active_time)
+                    < datetime('now','localtime','-5 hours')
+            """)
 
-        conn.commit()
-
-        conn.close()
+            conn.commit()
 
 
+    def mark_warned(self, mssv):
+        with self.db.connect() as conn:
+            cursor = conn.cursor()
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("""
+                UPDATE Users SET warned_at = ?
+                WHERE mssv = ?
+            """, (now, mssv))
+            conn.commit()
 
     ####################################################################
-    ########################  CLEAN UP USER  ###########################
+    ########################  UPDATE ACCOUNT  ###########################
     ####################################################################
 
 
     def update_account_status(self,mssv):
 
-        conn = self.db.connect()
+        with self.db.connect() as conn:
 
-        cursor = conn.cursor()
+            cursor = conn.cursor()
 
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        cursor.execute(
-            """
-            UPDATE Users SET
-            account_status = 'ACTIVE'
-            WHERE mssv = ?
-            """,
-            (
-                mssv,
+            cursor.execute(
+                """
+                UPDATE Users SET
+                account_status = 'ACTIVE'
+                WHERE mssv = ?
+                """,
+                (
+                    mssv,
+                )
             )
-        )
 
-        conn.commit()
-
-        conn.close()
+            conn.commit()
