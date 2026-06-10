@@ -27,7 +27,7 @@ class LoginController(QMainWindow):
             self.keyboard,
             alignment=Qt.AlignmentFlag.AlignTop
         )
-        self.keyboard.hide()
+        
 
         ########### EVENT ############
         self.mssv.installEventFilter(self)
@@ -83,6 +83,11 @@ class LoginController(QMainWindow):
 
         user = self.mssv.text()
 
+        if not user.isdigit():
+            self.thong_bao.setStyleSheet("color: red;")
+            self.thong_bao.setText("MSSV chỉ được chứa số!")
+            return
+
         success, message = (
             self.auth_service.login(user)
         )
@@ -120,17 +125,16 @@ class LoginController(QMainWindow):
         self.thong_bao.setText("")
 
 
-    def eventFilter(self, source, event):
-
-        if (
-            source == self.mssv
-            and event.type() == QEvent.Type.MouseButtonPress
-        ):
-
-            self.keyboard.show()
-            self.keyboard.set_target(self.mssv)
-            self.keyboard.mode = "NUM"
-            self.keyboard.build_keyboard()
-
-        return super().eventFilter(source,event)
+    def showEvent(self, event):
+        # Hiện bàn phím ngay khi vào màn hình login
+        self.keyboard.show()
+        self.keyboard.set_target(self.mssv)
+        self.keyboard.mode = "NUM"
+        self.keyboard.build_keyboard()
+        self.keyboard.confirm_button = self.next_login
+        super().showEvent(event)
     
+    # def hideEvent(self, event):
+    #     self.keyboard.hide()
+    #     self.keyboard.confirm_button = None  # ← Reset
+    #     super().hideEvent(event)

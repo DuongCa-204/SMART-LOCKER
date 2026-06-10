@@ -124,8 +124,6 @@ class LockerService:
     
     def set_status_locker(self, user, locker_id, name):
         
-        print("SERVICE RUNNING")
-
         return self.locker_repo.set_status_locker(user, locker_id, name)
     
 

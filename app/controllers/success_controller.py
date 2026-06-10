@@ -17,16 +17,18 @@ class SuccessController(QMainWindow):
         self.video_widget = QVideoWidget(self.success_gif)
         self.video_widget.setGeometry(0, 0, self.success_gif.width(), self.success_gif.height())
 
-        # 🔊 Audio (bắt buộc trong PyQt6)
-        self.audio_output = QAudioOutput(self)
+        # # 🔊 Audio (bắt buộc trong PyQt6)
+        # self.audio_output = QAudioOutput(self)
         
         # 🎞 Player
         self.player = QMediaPlayer(self)
         self.player.setVideoOutput(self.video_widget)
-        self.player.setAudioOutput(self.audio_output)
+        # self.player.setAudioOutput(self.audio_output)
 
         # 📼 Load video
-        video_path = "app/assets/gif/success.mp4"
+        from pathlib import Path
+        BASE_DIR = Path(__file__).parent.parent
+        video_path = str(BASE_DIR / "assets/gif/success.mp4")
         self.player.setSource(QUrl.fromLocalFile(video_path))
 
 

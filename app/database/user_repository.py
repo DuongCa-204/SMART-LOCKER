@@ -1,5 +1,7 @@
 from app.database.database import Database
 from datetime import datetime
+import sqlite3
+
 class UserRepository:
 
     def __init__(self):
@@ -10,6 +12,7 @@ class UserRepository:
 
         with self.db.connect() as conn:
 
+            conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
 
             cursor.execute(
@@ -138,7 +141,7 @@ class UserRepository:
                 SELECT email, mssv
                 FROM Users
                 WHERE datetime(last_active_time)
-                    < datetime('now','localtime','-2 hours')
+                    < datetime('now','localtime','-2 minutes')
                 AND warned_at IS NULL
                 AND account_status = 'ACTIVE'
             """)
@@ -151,15 +154,15 @@ class UserRepository:
             cursor = conn.cursor()
             cursor.execute("""
                 UPDATE Users
-                SET account_status = 'INACTIVE',
-                    warned_at = NULL
+                SET account_status = 'INACTIVE'
                 WHERE account_status = 'ACTIVE'
-                AND datetime(last_active_time)
-                    < datetime('now','localtime','-2 hours')
+                AND warned_at IS NOT NULL
+                AND datetime(warned_at)
+                    < datetime('now','localtime','-1 minutes')
                 AND warned_at IS NOT NULL
             """)
             conn.commit()
-            
+
 
     def delete_expired_users(self):
 
@@ -168,10 +171,11 @@ class UserRepository:
             cursor = conn.cursor()
 
             cursor.execute("""
-                DELETE FROM Users
+                UPDATE Users
+                SET account_status = 'DELETED'
                 WHERE account_status = 'INACTIVE'
-                AND datetime(last_active_time)
-                    < datetime('now','localtime','-5 hours')
+                AND datetime(warned_at)
+                    < datetime('now','localtime','-4 minutes')
             """)
 
             conn.commit()
@@ -193,6 +197,7 @@ class UserRepository:
 
 
     def update_account_status(self,mssv):
+        print(f"Updating status for: {mssv}")  # Thêm tạm để debug
 
         with self.db.connect() as conn:
 
@@ -203,7 +208,8 @@ class UserRepository:
             cursor.execute(
                 """
                 UPDATE Users SET
-                account_status = 'ACTIVE'
+                account_status = 'ACTIVE',
+                warned_at = NULL
                 WHERE mssv = ?
                 """,
                 (

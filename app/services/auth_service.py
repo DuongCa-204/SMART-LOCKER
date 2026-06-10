@@ -1,6 +1,7 @@
 from app.database.user_repository import UserRepository
 from datetime import datetime, timedelta
 from app.utils.session import Session
+from app.config import EMAIL_SENDER, EMAIL_PASSWORD
 import secrets
 import smtplib
 
@@ -22,12 +23,17 @@ class AuthService:
                 "Chưa đăng ký tài khoản"
             )
         
-        if user[3] == 0:
+        if user['is_approved'] == 0:
             return (
                 False, "Tài khoản đang chờ phê duyệt"
             )
-        
-        
+
+
+        ####  LỰA CHỌN KHI INACTIVE (USER ĐƯỢC TIẾP TỤC/ PHẢI BÁO ADMIN)
+        if user['account_status'] == 'INACTIVE':
+            return (False, "Tài khoản đã bị khóa, vui lòng liên hệ admin")
+            
+            
         return (
             True,
             "Đăng nhập thành công"
@@ -58,13 +64,13 @@ class AuthService:
 
             return (
                 True,
-                "Đăng kí tài khoảng thành công"
+                "Đăng kí tài khoản thành công"
             )
 
 
         return(
             False,
-            "TÀI KHOẢNG ĐÃ TỒN TẠI"
+            "TÀI KHOẢN ĐÃ TỒN TẠI"
         )
     
     def get_name_user(self, mssv):
@@ -80,33 +86,26 @@ class AuthService:
         otp = str(secrets.randbelow(9000)+1000)
         # tạo ra số nguyên ngẫu nhiên nhỏ hơn 9000
         # + 1000 để đảm bảo có đủ 4 chữ số
+        # câu trúc f" " -> cho phép chèn biến vào trong chuỗi  => ở đây chèn thêm otp
+        msg = f"Subject: Smart Locker\n\nYour locker PIN is {otp}"
 
         # Gửi mã otp về Email
         # sử dụng app_password của gamil gửi
         # catanduong78@gmail.com
-        from app.config import (
-            EMAIL_SENDER,
-            EMAIL_PASSWORD
-        )
-
-        sender = EMAIL_SENDER
-        password = EMAIL_PASSWORD
-
-        # câu trúc f" " -> cho phép chèn biến vào trong chuỗi  => ở đây chèn thêm otp
-        msg = f"Subject: Smart Locker\n\nYour locker PIN is {otp}"
-
         # tạo kết nối đến mail server
         # cấu trúc smtplib.SMTP(server_address, port)
         # erver_address : địa chỉ server SMTP của Gmail
         # port          : cổng gửi email
-        server = smtplib.SMTP("smtp.gmail.com",587)
-        # bật mã hóa TLS ( mục đích: mã hóa dữ liệu trước khi gửi email)
-        server.starttls()
-        # đăng nhập gmail => gg không cho đăng nhập bằng mật khẩu của tk thật
-        server.login(sender,password)
-        server.sendmail(sender,email,msg)
-        # ngắt kết nối SMTP server
-        server.quit() 
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_SENDER, email, msg)
+            server.quit()
+        except Exception as e:
+            print(f"Lỗi gửi email: {e}")
+            return (False, "Gửi OTP thất bại, vui lòng thử lại")
+
 
         Session.current_otp = otp
 
@@ -154,7 +153,6 @@ class AuthService:
 
         return (
             True,
-            "Xác thực thành công",
-
+            "Xác thực thành công"
 
         )

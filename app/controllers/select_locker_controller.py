@@ -24,18 +24,33 @@ class SelectLockerController(QMainWindow):
         Session.selected_locker = None
         self.locker_buttons = []
 
-        self.load_style()
+        
         self.setup_locker_buttons()
 
         # self.load_locker_status()
 
+
+        ########### SETUP BUTTON ###########
+        for btn in [self.back_mode, self.chon_tu]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
+        ########### EVENT ###########
         self.back_mode.clicked.connect(self.go_to_begin)
         self.chon_tu.clicked.connect(self.confirm_action)
 
-    # ================= STYLE =================
-    def load_style(self):
-        with open("app/assets/styles/locker.qss", "r") as file:
-            self.setStyleSheet(file.read())
+
 
     # ================= SETUP BUTTONS =================
     def setup_locker_buttons(self):
@@ -171,13 +186,9 @@ class SelectLockerController(QMainWindow):
         # success = self.locker_service.set_status_locker( user, locker_id)
         self.locker_service.set_status_locker( user, locker_id, name)
 
-        self.loading_page.set_message(
-            "Tiến hành mở tủ..."
-        )
+        self.loading_page.set_message("Tiến hành mở tủ...")
 
-        self.stacked_widget.setCurrentWidget(
-            self.loading_page
-        )
+        self.stacked_widget.setCurrentWidget(self.loading_page)
 
         # ===== SAU 1 GIÂY =====
 
@@ -214,11 +225,16 @@ class SelectLockerController(QMainWindow):
 
     # ================= NAV =================
     def go_to_begin(self):
-        self.stacked_widget.setCurrentIndex(0)
-        self.reset_form()
+        QTimer.singleShot(150, lambda: (
+            self.reset_form(),
+            self.stacked_widget.setCurrentIndex(0)
+        ))
 
     def go_to_mode(self):
-        self.stacked_widget.setCurrentIndex(3)
+        QTimer.singleShot(150, lambda: (
+            self.reset_form(),
+            self.stacked_widget.setCurrentIndex(3)
+        ))
 
     def reset_form(self):
         Session.selected_locker = None

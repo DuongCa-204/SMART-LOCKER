@@ -2,12 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer, pyqtSignal, QUrl, QObject
 from PyQt6.uic import loadUi
-
-
-from app.utils.session import Session
 from app.services.locker_service import LockerService
-from app.controllers.login_controller import LoginController
-from app.controllers.register_controller import RegisterController
 
 
 
@@ -19,8 +14,6 @@ class AuthMethodController(QMainWindow):
 
         uic.loadUi("app/ui/AUTH_METHOD.ui", self)
         self.stacked_widget = stacked_widget
-
-        self.locker_service = LockerService()
 
 
         ########### SETUP BUTTON ###########

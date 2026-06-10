@@ -1,13 +1,5 @@
 import traceback, sys
 
-# def excepthook(exc_type, exc_value, exc_tb):
-#     traceback.print_exception(exc_type, exc_value, exc_tb)
-#     input("Nhấn Enter để thoát...")  # giữ cửa sổ lại
-
-# sys.excepthook = excepthook
-
-# import sys
-
 from PyQt6.QtWidgets import QApplication, QStackedWidget
 from PyQt6.QtCore import QTimer, pyqtSignal, QUrl, QObject, QEvent
 
@@ -27,6 +19,7 @@ from app.controllers.send_otp_controller import SendEmailController
 from app.controllers.enter_otp_controller import EnterOtpController
 from app.controllers.service_controller import ServiceController
 from app.controllers.menu_service import MenuServiceController
+from app.controllers.cleanup_worker import CleanupWorker
 from app.services.cleanup_service import CleanupService
 from app.database.database import Database
 from app.database.locker_repository import LockerRepository
@@ -138,20 +131,31 @@ def back_to_video():
 def show_begin():
 
     stacked_widget.setCurrentWidget(begin_page)
-    idle_timer.start(60000)
 
+
+# ===== CLEANUP WORKER =====
+
+cleanup_worker = None  # Giữ reference tránh bị garbage collect
+
+def run_cleanup():
+    global cleanup_worker
+    # Nếu worker cũ đang chạy → không tạo mới
+    if cleanup_worker and cleanup_worker.isRunning():
+        return
+    cleanup_worker = CleanupWorker(cleanup_service)
+    cleanup_worker.start()
 
 # ===== TIMER CLEANUP =====
 # cleanup_users()
 video_page.touched.connect(show_begin)
 idle_timer.timeout.connect(back_to_video)
-timer_cleanup.timeout.connect(cleanup_service.cleanup_users)
+timer_cleanup.timeout.connect(run_cleanup)
 
 
-
+cleanup_service.cleanup_users()
 timer_cleanup.start(60000)  # 60s (ms)
 # giữ reference để không bị mất
-# stacked_widget.cleanup_timer = timer_cleanup
+
 
 
 # WINDOW SETTING

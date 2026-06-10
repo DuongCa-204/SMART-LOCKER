@@ -96,6 +96,11 @@ class RegisterController(QMainWindow):
         email = self.email_reg.text()
         password = self.pass_reg.text()
 
+        if not mssv.isdigit():
+            self.thong_bao_reg.setStyleSheet("color: red;")
+            self.thong_bao_reg.setText("MSSV chỉ được chứa số!")
+            return
+
         success, message = self.auth_service.register(mssv, name, email, password)
 
         if not success:

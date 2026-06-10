@@ -22,48 +22,27 @@ class SelectModeController(QMainWindow):
         self.auth_service = AuthService()
 
 
+        ########### SETUP BUTTON ###########
+        for btn in [self.lay_do, self.tra_tu]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
+
+
+        #############   EVENT   ################
         self.lay_do.clicked.connect(self.MO_TU)
         self.tra_tu.clicked.connect(self.TRA_TU)
-
-    def GUI_DO(self):
-
-        user = Session.current_user
-
-
-        success, message = (
-            self.locker_service.borrow_locker(user)
-        )
-
-        if not success:
-
-            self.thong_bao_tu.setStyleSheet(
-                "color: red;"
-            )
-
-            self.thong_bao_tu.setText(message)
-
-            return
-
-        # ===== HIỆN LOADING =====
-        else:
-            self.loading_page.set_message(
-                "Đang kiểm tra tủ trống..."
-            )
-
-            self.stacked_widget.setCurrentWidget(
-                self.loading_page
-            )
-
-            # ===== SAU 1 GIÂY =====
-
-            QTimer.singleShot(2000,lambda: self.show_success(
-                "Kiểm tra thành công",
-                self.go_to_select_locker
-                )
-            )
-
-
-
 
 
     def MO_TU(self):
@@ -137,7 +116,7 @@ class SelectModeController(QMainWindow):
 
             QTimer.singleShot(2000,lambda: self.show_success(
                 "Trả tủ thành công",
-                self.go_to_begin_TRATU
+                self.go_to_begin
                 )
             )
 
@@ -163,17 +142,14 @@ class SelectModeController(QMainWindow):
         )
 
 
-    def go_to_begin_TRATU(self):
-        
-        self.stacked_widget.setCurrentIndex(0)
-        self.reset_form()
+
 
     def go_to_begin(self):
-        self.stacked_widget.setCurrentIndex(0)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(0))
         self.reset_form()
 
     def go_to_select_locker(self):
-        self.stacked_widget.setCurrentIndex(4)
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(4))
         self.reset_form()
 
     def reset_form(self):

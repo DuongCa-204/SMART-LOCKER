@@ -23,10 +23,26 @@ class SendEmailController(QMainWindow):
 
         self.worker = None
 
-        # EVENT
-        self.semail_b.clicked.connect(
-            self.send_otp
-        )
+
+        ########### SETUP BUTTON ###########
+        for btn in [self.semail_b]:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
+
+
+        ########### EVENT ###########
+        self.semail_b.clicked.connect(self.send_otp)
 
     # =========================
     # SEND OTP
@@ -117,10 +133,7 @@ class SendEmailController(QMainWindow):
     # =========================
     def go_to_enter_otp(self):
 
-        self.stacked_widget.setCurrentIndex(
-            12
-        )
-
+        QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(12))
         self.reset_form()
 
     # =========================

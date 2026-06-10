@@ -76,16 +76,16 @@ class CleanupService:
 
             # 2. Lấy user chưa được cảnh báo
             users = self.user_repo.get_inactive_users()
-
+            
             for email, mssv in users:
                 try:
-                    # 3. Gửi mail cảnh báo
                     self.send_warning_email(email, mssv)
-                    # 4. Đánh dấu đã gửi mail
-                    self.user_repo.mark_warned(mssv)
-
                 except Exception as e:
                     print(f"Lỗi gửi mail {mssv}: {e}")
+                    continue  # Bỏ qua user này nếu gửi mail lỗi
+                
+                # Chỉ mark_warned khi gửi mail thành công
+                self.user_repo.mark_warned(mssv)
 
             # 5. Đánh dấu INACTIVE sau khi đã gửi mail
             self.user_repo.mark_inactive()

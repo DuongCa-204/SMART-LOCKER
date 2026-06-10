@@ -27,7 +27,7 @@ class PassWordController(QMainWindow):
             self.keyboard,
             alignment=Qt.AlignmentFlag.AlignTop
         )
-        self.keyboard.hide()
+
 
 
         ########### SETUP BUTTON ###########
@@ -98,23 +98,31 @@ class PassWordController(QMainWindow):
         self.pass_account.clear()
         self.thong_bao_pass.setText("")
 
-    def eventFilter(self, source, event):
+    # def eventFilter(self, source, event):
 
-        if (
-            source == self.pass_account
-            and event.type() == QEvent.Type.MouseButtonPress
-        ):
+    #     if (
+    #         source == self.pass_account
+    #         and event.type() == QEvent.Type.MouseButtonPress
+    #     ):
 
-            self.keyboard.show()
+    #         self.keyboard.show()
 
-            self.keyboard.set_target(
-                self.pass_account
-            )
-            self.keyboard.mode = "NUM"
-            self.keyboard.build_keyboard()
+    #         self.keyboard.set_target(
+    #             self.pass_account
+    #         )
+    #         self.keyboard.mode = "NUM"
+    #         self.keyboard.build_keyboard()
 
-        return super().eventFilter(
-            source,
-            event
-        )
+    #     return super().eventFilter(
+    #         source,
+    #         event
+    #     )
+    def showEvent(self, event):
+        # Hiện bàn phím ngay khi vào màn hình login
+        self.keyboard.show()
+        self.keyboard.set_target(self.pass_account)
+        self.keyboard.mode = "ABC"
+        self.keyboard.build_keyboard()
+        self.keyboard.confirm_button = self.next_mode
+        super().showEvent(event)
     

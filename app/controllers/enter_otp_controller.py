@@ -16,13 +16,9 @@ class EnterOtpController(QMainWindow):
 
         super().__init__()
 
-        uic.loadUi(
-            "app/ui/ENTER_OTP.ui",
-            self
-        )
+        uic.loadUi("app/ui/ENTER_OTP.ui",self)
 
         self.stacked_widget = stacked_widget
-
         self.auth_service = AuthService()
         self.locker_service = LockerService()
 
@@ -63,6 +59,30 @@ class EnterOtpController(QMainWindow):
         self.clear_b.clicked.connect(self.clear_pin)
         self.enter_b.clicked.connect(self.check_otp)
 
+
+        # ============================
+        # Hiệu ứng nhấn nút
+        # ============================
+        all_buttons = [
+            self.b0, self.b1, self.b2, self.b3, self.b4,
+            self.b5, self.b6, self.b7, self.b8, self.b9,
+            self.clear_b, self.enter_b, self.send_email
+        ]
+
+        for btn in all_buttons:
+            btn.setCheckable(True)
+            btn.setAutoExclusive(False)
+
+            def create_release_handler(b=btn):
+                def safe_clear():
+                    try:
+                        if b and not b.isHidden():
+                            b.setChecked(False)
+                    except RuntimeError:
+                        pass
+                QTimer.singleShot(150, safe_clear)
+
+            btn.released.connect(create_release_handler)
 
     # ============================
     # Xóa mã PIN
@@ -117,9 +137,9 @@ class EnterOtpController(QMainWindow):
         )
 
         if locker:
-            self.stacked_widget.setCurrentIndex(3)   # Trang OPEN / RETURN
+            QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(3))   # Trang OPEN / RETURN
         else:
-            self.stacked_widget.setCurrentIndex(10)  # Trang SEND LOCKER
+            QTimer.singleShot(150, lambda: self.stacked_widget.setCurrentIndex(10))  # Trang SEND LOCKER
 
 
     # ===========================================================================
@@ -231,7 +251,7 @@ class EnterOtpController(QMainWindow):
                 
         else:
             
-                self.time_label.setText("Chưa có OTP"),
+                self.time_label.setText("Chưa có OTP")
                 self.send_email.setEnabled(True)
             
 

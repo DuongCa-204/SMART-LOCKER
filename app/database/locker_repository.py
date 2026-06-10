@@ -129,12 +129,16 @@ class LockerRepository:
                             (locker_id, mssv, timestamp, event, name)
                             VALUES (?, ?, ?, ?, ?)""", 
                             (locker_id, user, now, 'BORROW', name))
+                
                 cursor.execute("""
                             UPDATE Users SET 
-                            last_active_time = ? 
+                            last_active_time = ?,
+                            account_status = 'ACTIVE',
+                            warned_at = NULL
                             WHERE mssv =? """,
                             (now, user,)
                             )
+
                 conn.commit()
 
                 return True

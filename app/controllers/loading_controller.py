@@ -15,9 +15,9 @@ class LoadingController(QMainWindow):
             self
         )
 
-        self.movie = QMovie(
-            "app/assets/gif/loading.gif"
-        )
+        from pathlib import Path
+        BASE_DIR = Path(__file__).parent.parent  # trỏ về thư mục SML/app
+        self.movie = QMovie(str(BASE_DIR / "assets/gif/loading.gif"))
 
         self.movie.setScaledSize(
             QSize(180, 180)

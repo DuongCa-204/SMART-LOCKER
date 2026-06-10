@@ -110,7 +110,6 @@ class LockerButton(QPushButton):
         self.refresh_style()
 
 
-        
     def refresh_style(self):
 
         self.style().unpolish(self)

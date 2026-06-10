@@ -4,8 +4,7 @@ from PyQt6 import uic
 from app.utils.session import Session
 from app.services.auth_service import AuthService
 from app.services.locker_service import LockerService
-from app.widgets.virtual_keyboard import VirtualKeyboard
-from PyQt6.QtCore import QTimer, QEvent, Qt
+from PyQt6.QtCore import QTimer
 
 
 class SelectMode_GUIDOController(QMainWindow):
@@ -21,6 +20,25 @@ class SelectMode_GUIDOController(QMainWindow):
         self.locker_service = LockerService()
         self.auth_service = AuthService()
 
+
+        ########### SETUP BUTTON ###########
+        self.gui_do.setCheckable(True)
+        self.gui_do.setAutoExclusive(False)
+
+        def create_release_handler(b=self.gui_do):
+            def safe_clear():
+                try:
+                    if b and not b.isHidden():
+                        b.setChecked(False)
+                except RuntimeError:
+                    pass
+            QTimer.singleShot(150, safe_clear)
+
+        self.gui_do.released.connect(create_release_handler)
+
+
+
+        ########### EVENT ###########
         self.gui_do.clicked.connect(self.GUI_DO)
 
 

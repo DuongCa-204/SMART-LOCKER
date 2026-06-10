@@ -14,6 +14,7 @@ class VirtualKeyboard(QWidget):
         self.target = None
         self.mode = "ABC"
         self.is_upper = False
+        self.confirm_button = None
 
         # ===== MAIN LAYOUT =====
         self.main_layout = QVBoxLayout()
@@ -44,7 +45,7 @@ class VirtualKeyboard(QWidget):
                 ['q','w','e','r','t','y','u','i','o','p','←'],
                 ['a','s','d','f','g','h','j','k','l','ENTER'],
                 ['SHIFT','z','x','c','v','b','n','m','?'],
-                ['123','/','SPACE','.com','OK']
+                ['123','@','SPACE','.com','OK']
             ]
         else:
             rows = [
@@ -172,6 +173,12 @@ class VirtualKeyboard(QWidget):
 
 # ===== ĐOẠN XỬ LÝ ENTER VÀ OK TỰ ĐỘNG CHUYỂN HOẶC NHẤN REGISTER =====
         elif key in ['ENTER', 'OK']:
+
+            if self.confirm_button and self.confirm_button.isEnabled():
+                self.confirm_button.click()
+            else:
+                self.hide()
+
             parent = self.target.parentWidget()
             if parent:
                 next_widget = self.target.nextInFocusChain()
@@ -188,25 +195,7 @@ class VirtualKeyboard(QWidget):
                             return # Kết thúc hàm, tiếp tục gõ ô mới
                     next_widget = next_widget.nextInFocusChain()
                 
-                # Vòng lặp 2: Nếu KHÔNG CÒN ô nhập liệu nào nữa (đang ở ô cuối cùng như Password)
-                # if not has_next_input:
-                #     # Tìm nút bấm Register trong toàn bộ giao diện của cửa sổ cha
-                #     # Thay chữ "btn_register" bằng objectName chính xác của nút Đăng ký trong Qt Designer của bạn
-                #     register_button = parent.window().findChild(QPushButton, "btn_register")
-                    
-                #     if register_button and register_button.isEnabled() and register_button.isVisible():
-                #         # LỰA CHỌN A: Click tự động luôn cho người dùng (Khuyên dùng vì tiện)
-                #         register_button.click() 
-                        
-                #         # LỰA CHỌN B: Nếu bạn chỉ muốn con trỏ nhảy tới nút đó chứ chưa muốn click, 
-                #         # hãy comment dòng (.click()) ở trên và bỏ comment dòng dưới này:
-                #         # register_button.setFocus()
-                        
-
-                        
-            
-            # Nếu không tìm thấy nút bấm, ẩn bàn phím như bình thường
-            self.hide()
+                     
         # ====================================================================
 
         elif key == 'SHIFT':
@@ -222,10 +211,7 @@ class VirtualKeyboard(QWidget):
             self.build_keyboard()
 
         else:
-            if self.mode == "NUM" and not key.isdigit():
 
-                return
-            
             if self.is_upper:
                 key = key.upper()
             self.target.insert(key)
