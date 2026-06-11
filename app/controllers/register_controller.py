@@ -136,63 +136,46 @@ class RegisterController(QMainWindow):
 
             # ===== FULLNAME =====
             if source == self.fullname:
-
-                self.keyboard.show()
-
                 self.keyboard.mode = "ABC"
-
                 self.keyboard.build_keyboard()
-
-                self.keyboard.set_target(
-                    self.fullname
-                )
-
+                self.keyboard.set_target(self.fullname)
+                self.keyboard.confirm_button = None
 
             # ===== MSSV =====
             elif source == self.mssv_reg:
-
-                self.keyboard.show()
-
                 self.keyboard.mode = "NUM"
-
                 self.keyboard.build_keyboard()
-
-                self.keyboard.set_target(
-                    self.mssv_reg
-                )
-
+                self.keyboard.set_target(self.mssv_reg)
+                self.keyboard.confirm_button = None
 
             # ===== EMAIL =====
             elif source == self.email_reg:
-
-                self.keyboard.show()
-
                 self.keyboard.mode = "ABC"
-
                 self.keyboard.build_keyboard()
+                self.keyboard.set_target(self.email_reg)
+                self.keyboard.confirm_button = None
 
-                self.keyboard.set_target(
-                    self.email_reg
-                )
-
-            # ===== PASS =====
+            # ===== PASS (ô cuối cùng) =====
             elif source == self.pass_reg:
-
-                self.keyboard.show()
-
                 self.keyboard.mode = "ABC"
-
                 self.keyboard.build_keyboard()
+                self.keyboard.set_target(self.pass_reg)
+                self.keyboard.confirm_button = self.register_b  # ← Click register khi OK
 
-                self.keyboard.set_target(
-                    self.pass_reg
-                )
+        return super().eventFilter(source, event)
+    
+    def showEvent(self, event):
+        self.keyboard.show()
+        self.keyboard.set_target(self.fullname)
+        self.keyboard.mode = "ABC"
+        self.keyboard.build_keyboard()
+        self.keyboard.confirm_button = None
+        super().showEvent(event)
 
-        return super().eventFilter(
-            source,
-            event
-        )
-
+    def hideEvent(self, event):
+        self.keyboard.hide()
+        self.keyboard.confirm_button = None
+        super().hideEvent(event)
 
     def show_success(
         self,

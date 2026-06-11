@@ -49,6 +49,8 @@ QPushButton#sign_in:checked {
 
 
 /* ================= SERVICE BUTTON ================= */
+
+
 QPushButton#service_button {
     background: transparent;
     color: #90A4AE;
@@ -67,4 +69,115 @@ QPushButton#service_button:checked {
     border-color: #546E7A;
     color: #546E7A;
     padding-top: 12px;
+}
+
+
+/* ===================================================*/
+/* ================= AUTH METHOD BUTTON ==============*/
+/* ===================================================*/
+
+/* ================= PASS SELECT BUTTON ==============*/
+QPushButton#pass_select {
+    background: transparent;
+    color: #376287;
+    border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #1b325d;
+    padding: 10px 20px;
+    letter-spacing: 0.5px;
+}
+
+QPushButton#pass_select:pressed,
+QPushButton#pass_select:checked {
+    background: #7090a5;
+    border-color: #25495a;
+    color: #2f4854;
+    padding-top: 12px;
+}
+
+/* ================= RECOG SELECTED BUTTON ==============*/
+
+
+QPushButton#recog_select {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00897B,
+        stop:1 #00695C
+    );
+    color: white;
+    border-radius: 16px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    padding: 16px 32px;
+    letter-spacing: 1px;
+}
+
+QPushButton#recog_select:pressed,
+QPushButton#recog_select:checked {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00695C,
+        stop:1 #004D40
+    );
+    padding-top: 18px;
+}
+
+
+
+/* ===================================================*/
+/* =================    PASSWORD BUTTON ==============*/
+/* ===================================================*/
+
+/* ================= PASS SELECT BUTTON ==============*/
+QPushButton#back_auth_method {
+    background: transparent;
+    color: #376287;
+    border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #1b325d;
+    padding: 10px 20px;
+    letter-spacing: 0.5px;
+}
+
+QPushButton#back_auth_method:pressed,
+QPushButton#back_auth_method:checked {
+    background: #1066a0;
+    border-color: #25495a;
+    color: #2f4854;
+    padding-top: 12px;
+}
+
+/* ================= RECOG SELECTED BUTTON ==============*/
+
+
+QPushButton#next_mode {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #36b0a4,
+        stop:1 #0f4741
+    );
+    color: white;
+    border-radius: 16px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    padding: 16px 32px;
+    letter-spacing: 1px;
+}
+
+QPushButton#next_mode:pressed,
+QPushButton#next_mode:checked {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00695C,
+        stop:1 #004D40
+    );
+    padding-top: 18px;
 }

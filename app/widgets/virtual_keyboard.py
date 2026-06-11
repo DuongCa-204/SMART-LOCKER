@@ -173,28 +173,23 @@ class VirtualKeyboard(QWidget):
 
 # ===== ĐOẠN XỬ LÝ ENTER VÀ OK TỰ ĐỘNG CHUYỂN HOẶC NHẤN REGISTER =====
         elif key in ['ENTER', 'OK']:
-
             if self.confirm_button and self.confirm_button.isEnabled():
                 self.confirm_button.click()
             else:
+                parent = self.target.parentWidget()
+                if parent:
+                    next_widget = self.target.nextInFocusChain()
+                    while next_widget and next_widget != self.target:
+                        if next_widget.isEnabled() and next_widget.isVisible():
+                            if next_widget.__class__.__name__ in ['QLineEdit', 'QTextEdit', 'QPlainTextEdit']:
+                                next_widget.setFocus()
+                                self.set_target(next_widget)
+                                return
+                        next_widget = next_widget.nextInFocusChain()
+                
+                # ✅ Chỉ ẩn khi không tìm thấy ô tiếp theo
+                # và không có confirm_button
                 self.hide()
-
-            parent = self.target.parentWidget()
-            if parent:
-                next_widget = self.target.nextInFocusChain()
-                has_next_input = False
-                
-                # Vòng lặp 1: Kiểm tra xem phía sau có còn ô nhập liệu (QLineEdit) nào nữa không
-                while next_widget and next_widget != self.target:
-                    if next_widget.isEnabled() and next_widget.isVisible():
-                        if next_widget.__class__.__name__ in ['QLineEdit', 'QTextEdit', 'QPlainTextEdit']:
-                            # Tìm thấy ô nhập liệu tiếp theo! Chuyển focus sang đó ngay
-                            next_widget.setFocus()
-                            self.set_target(next_widget)
-                            has_next_input = True
-                            return # Kết thúc hàm, tiếp tục gõ ô mới
-                    next_widget = next_widget.nextInFocusChain()
-                
                      
         # ====================================================================
 

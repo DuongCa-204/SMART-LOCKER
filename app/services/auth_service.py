@@ -30,7 +30,7 @@ class AuthService:
 
 
         ####  LỰA CHỌN KHI INACTIVE (USER ĐƯỢC TIẾP TỤC/ PHẢI BÁO ADMIN)
-        if user['account_status'] == 'INACTIVE':
+        if user['account_status'] == 'DELETED':
             return (False, "Tài khoản đã bị khóa, vui lòng liên hệ admin")
             
             

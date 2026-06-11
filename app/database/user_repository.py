@@ -159,7 +159,6 @@ class UserRepository:
                 AND warned_at IS NOT NULL
                 AND datetime(warned_at)
                     < datetime('now','localtime','-1 minutes')
-                AND warned_at IS NOT NULL
             """)
             conn.commit()
 
