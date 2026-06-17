@@ -73,7 +73,6 @@ filter = GlobalFilter()
 app.installEventFilter(filter)   
 
 
-
 # STACK WIDGET
 stacked_widget = QStackedWidget()
 

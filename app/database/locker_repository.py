@@ -153,8 +153,6 @@ class LockerRepository:
         try:
             with self.db.connect() as conn:
 
-                conn = self.db.connect()
-
                 cursor = conn.cursor()
                 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

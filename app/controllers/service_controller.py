@@ -22,7 +22,7 @@ class ServiceController(QMainWindow):
             self.keyboard,
             alignment=Qt.AlignmentFlag.AlignTop,
         )
-        self.keyboard.hide()
+        
 
         ########### EVENT ############
         self.lineEdit.installEventFilter(self)
@@ -73,14 +73,12 @@ class ServiceController(QMainWindow):
         self.thong_bao_pin.clear()
         self.keyboard.hide()
 
-    def eventFilter(self, source, event):
-        if (
-            source == self.lineEdit
-            and event.type() == QEvent.Type.MouseButtonPress
-        ):
-            self.keyboard.show()
-            self.keyboard.set_target(self.lineEdit)
-            self.keyboard.mode = "NUM"
-            self.keyboard.build_keyboard()
 
-        return super().eventFilter(source, event)
+    def showEvent(self, event):
+        # Hiện bàn phím ngay khi vào màn hình login
+        self.keyboard.show()
+        self.keyboard.set_target(self.lineEdit)
+        self.keyboard.mode = "NUM"
+        self.keyboard.build_keyboard()
+        self.keyboard.confirm_button = self.next
+        super().showEvent(event)

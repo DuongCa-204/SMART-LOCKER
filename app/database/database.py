@@ -32,7 +32,7 @@ class Database:
 
 ############ BƯỚC 3 ##############
 # Path(__file__).parent => lấy thư mục chứa file hiện tại
-# Từ SML/app/database/database.py => SML/app/database/database.py
+# Từ SML/app/database/database.py => SML/app/database/
 
 ############ BƯỚC 4 ##############
 # Path(__file__).parent / "IntelligentLocker.db"  =>  Trong Pathlib nó dùng để nối đường dẫn.
